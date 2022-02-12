@@ -10,6 +10,8 @@ const execute = async (code: string) => {
   const lines: string[] = code.split("\n") // ㅇㅋ 패치 함
   if (lines[0] !== "어쩔티비") throw new Error("아무것도 모르죠?")
   if (lines[lines.length - 1] !== "저쩔티비") throw new Error("아무것도 모르죠?")
+  lines.shift()
+  lines.pop()
   for (const line of lines) {
     const [statement] = line.split(" ")
     if (statement === "ㅇㅉ") {
@@ -29,7 +31,7 @@ const getVariable = (line: string) => {
   if (line.split(" ")[0] === "티비") return input(line)
   if (statements.includes(line.split(" ")[0])) return
   const value = variables[line]
-  if (!value) return toNumber(line) === 0 ? "" : toNumber(line)
+  if (!value) return toNumber(line) === 0 ? null : toNumber(line)
   return value
 }
 
