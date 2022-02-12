@@ -4,23 +4,27 @@ import path from "path"
 import fs from "fs"
 
 const variables: { [key: string]: any } = {}
+const localVariables: { [key: string]: any } = {}
 const statements = ["ㅇㅉ", "ㅌㅂ", "저쩔", "어쩔"]
 
 const execute = async (code: string) => {
   const lines: string[] = code.split("\n")
   if (lines.shift() !== "쿠쿠루삥뽕") throw new Error("아무것도 모르죠?")
   if (lines.pop() !== "슉슈슉슉") throw new Error("아무것도 모르죠?")
-  for (const line of lines) {
-    const [statement] = line.split(" ")
+  for (const line in lines) {
+    const [statement] = lines[line].split(" ")
     if (statement === "어쩔") {
-      declareVariable(line)
+      declareVariable(lines[line])
     } else if (statement === "저쩔") {
-      assignVariable(line)
+      assignVariable(lines[line])
     } else if (statement === "ㅇㅉ") {
-      print(line)
+      print(lines[line])
     } else if (statement === "ㅌㅂ") {
-      input(line)
+      input(lines[line])
     }
+    // } else if (statement === "함수") {
+    //   lines.slice(Number(line))
+    // }
   }
 }
 
@@ -38,6 +42,8 @@ const getVariable = (line: string) => {
   if (!value) return toNumber(line) === 0 ? null : toNumber(line)
   return value
 }
+
+const parseFunction = (line: string) => {}
 
 const declareVariable = (line: string) => {
   const [statement, name, first, ...values] = line.split(" ")

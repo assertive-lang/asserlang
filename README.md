@@ -12,7 +12,8 @@ by [chul0721](https://github.com/chul0721) & [sujang958](https://github.com/suja
 
 # 문법
 
-무조건 코드의 시작과 끝에는 각각 '쿠쿠루삥뽕'와 '슉슈슉슉'가 포함되어야 합니다.
+무조건 코드의 시작과 끝에는 각각 '쿠쿠루삥뽕'와 '슉슈슉슉'가 포함되어야 합니다.  
+키워드는 변수의 이름이 될 수 없습니다.
 
 ## 연산자
 
@@ -63,7 +64,7 @@ by [chul0721](https://github.com/chul0721) & [sujang958](https://github.com/suja
 ```
 
 쿠쿠루삥뽕
-티비
+ㅌㅂ
 슉슈슉슉
 
 ```
@@ -73,7 +74,7 @@ by [chul0721](https://github.com/chul0721) & [sujang958](https://github.com/suja
 ```
 
 쿠쿠루삥뽕
-어쩔 ㅋㅋ 티비
+어쩔 다이슨v15디텍트앱솔루트엑스트라청소기 ㅌㅂ
 슉슈슉슉
 
 ```
@@ -96,7 +97,7 @@ by [chul0721](https://github.com/chul0721) & [sujang958](https://github.com/suja
 ```
 
 쿠쿠루삥뽕
-ㅇㅉ 티비
+ㅇㅉ ㅌㅂ
 슉슈슉슉
 
 ```
@@ -127,4 +128,4 @@ $ node dist/index.js 파일명
 - 어쩔파일
   파일을 제대로 불러오지 못한 경우 발생하는 에러
 
-~~저쩔티비~~
+~~저쩔ㅌㅂ~~
