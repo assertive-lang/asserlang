@@ -5,10 +5,10 @@ import fs from "fs"
 
 const variables: { [key: string]: any } = {}
 const localVariables: { [key: string]: any } = {}
-const statements = ["ㅇㅉ", "ㅌㅂ", "저쩔", "어쩔"]
+const statements = ["ㅇㅉ", "ㅌㅂ", "저쩔", "어쩔", "어쩔함수", "저쩔함수"]
 
 const execute = async (code: string) => {
-  const lines: string[] = code.split("\n")
+  const lines: string[] = code.replace(/\r/gi, "").split("\n")
   if (lines.shift() !== "쿠쿠루삥뽕") throw new Error("아무것도 모르죠?")
   if (lines.pop() !== "슉슈슉슉") throw new Error("아무것도 모르죠?")
   for (const line in lines) {
@@ -21,10 +21,12 @@ const execute = async (code: string) => {
       print(lines[line])
     } else if (statement === "ㅌㅂ") {
       input(lines[line])
-    }
-    // } else if (statement === "함수") {
-    //   lines.slice(Number(line))
-    // }
+    }/* else if (statement === "어쩔함수") {
+      const endIndex = lines.slice(Number(line)).indexOf("저쩔함수")
+      if (endIndex <= -1) throw new Error("저쩔함수")
+      const functionBlock = lines.slice(Number(line), endIndex - 1)
+      parseFunction(functionBlock)
+    }*/
   }
 }
 
@@ -43,7 +45,9 @@ const getVariable = (line: string) => {
   return value
 }
 
-const parseFunction = (line: string) => {}
+const parseFunction = (functionLines: string[]) => {
+  console.log(functionLines)
+}
 
 const declareVariable = (line: string) => {
   const [statement, name, first, ...values] = line.split(" ")
