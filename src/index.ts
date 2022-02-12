@@ -4,8 +4,9 @@ import path from "path"
 import fs from "fs"
 
 const variables: { [key: string]: any } = {}
-const localVariables: { [key: string]: any } = {}
-const statements = ["ㅇㅉ", "ㅌㅂ", "저쩔", "어쩔", "어쩔함수", "저쩔함수"]
+const localVariables: { [key: string]: { [key: string]: any } } = {}
+const subRoutines: { [key: string]: (args?: any[]) => void | any } = {}
+const statements = ["ㅇㅉ", "ㅌㅂ", "저쩔", "어쩔", "안물", "안물", "안궁"]
 
 const execute = async (code: string) => {
   const lines: string[] = code.replace(/\r/gi, "").split("\n")
@@ -21,12 +22,14 @@ const execute = async (code: string) => {
       print(lines[line])
     } else if (statement === "ㅌㅂ") {
       input(lines[line])
-    }/* else if (statement === "어쩔함수") {
-      const endIndex = lines.slice(Number(line)).indexOf("저쩔함수")
-      if (endIndex <= -1) throw new Error("저쩔함수")
-      const functionBlock = lines.slice(Number(line), endIndex - 1)
-      parseFunction(functionBlock)
-    }*/
+    } else if (statement === "안물") {
+      const endIndex = lines.findIndex((v, i) => i !== Number(line) && v === "안물")
+      if (endIndex <= -1) throw new Error("안물")
+      const functionBlock = lines.splice(Number(line), endIndex)
+      declareFunction(functionBlock)
+    } else if (statement === "안궁") {
+      callFunction(lines[line])
+    }
   }
 }
 
@@ -45,8 +48,63 @@ const getVariable = (line: string) => {
   return value
 }
 
-const parseFunction = (functionLines: string[]) => {
-  console.log(functionLines)
+const callFunction = (line: string) => {
+  const components = line.split(" ")
+  if (components.shift() !== "안궁") return
+  const [name, ...args] = components
+  subRoutines[name](args.map((v) => getVariable(v)))
+}
+
+const declareFunction = (functionLines: string[]) => {
+  const [declare, ...lines] = functionLines
+  const [_, name, ...args] = declare.split(" ")
+  if (!name) throw new Error("안물함수이름")
+  localVariables[name] = {}
+  const functionComponents: string[] = [`([${args.map((arg) => `${arg},`).join(" ")}]) => {`]
+  for (const line of lines) {
+    const [statement, ...values] = line.trim().split(" ")
+    if (statement === "어쩔" || statement === "저쩔") {
+      const [varName, ...varValue] = values
+      if (varValue[0] === "ㅌㅂ") {
+        functionComponents.push(
+          `localVariables.${name}.${varName} = input("${varValue.join(" ").trim()}")`
+        )
+      } else {
+        const value = varValue.join(" ").trim()
+        functionComponents.push(
+          `localVariables.${name}.${varName} = ${
+            isPureNumber(value)
+              ? toNumber(value)
+              : localVariables[name][value] ?? variables[value] ?? 0
+          }`
+        )
+        localVariables[name][varName] = `${
+          isPureNumber(value)
+            ? toNumber(value)
+            : localVariables[name][value] ?? variables[value] ?? 0
+        }`
+      }
+    } else if (statement === "ㅇㅉ") {
+      functionComponents.push(
+        `console.log(${values
+          .map((value) =>
+            args.includes(value)
+              ? value
+              : `"${
+                  !isPureNumber(value)
+                    ? localVariables[name][value] ?? getVariable(value)
+                    : toNumber(value)
+                }"`
+          )
+          .join(",")})`
+      )
+    } else if (statement === "ㅌㅂ") {
+      functionComponents.push(`input("${values.join(" ")}`)
+    }
+  }
+  functionComponents.push("}")
+  localVariables[name] = {}
+  subRoutines[name] = eval(functionComponents.join("\n"))
 }
 
 const declareVariable = (line: string) => {
