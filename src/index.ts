@@ -1,15 +1,13 @@
-import PromptSync from "prompt-sync"
+import ReadLine from "readline-sync"
 import { program } from "commander"
 import path from "path"
 import fs from "fs"
-
-const inputUtil = PromptSync({ sigint: true })
 
 const variables: { [key: string]: any } = {}
 const statements = ["ㅇㅉ", "ㅈㅉ", "어쩔", "티비"]
 
 const execute = async (code: string) => {
-  const lines: string[] = code.split("\n")
+  const lines: string[] = code.split("\n") // ㅇㅋ 패치 함
   if (lines[0] !== "어쩔티비") throw new Error("아무것도 모르죠?")
   if (lines[lines.length - 1] !== "저쩔티비") throw new Error("아무것도 모르죠?")
   for (const line of lines) {
@@ -31,14 +29,25 @@ const getVariable = (line: string) => {
   if (line.split(" ")[0] === "티비") return input(line)
   if (statements.includes(line.split(" ")[0])) return
   const value = variables[line]
-  if (!value) return null
+  if (!value) return toNumber(line) === 0 ? "" : toNumber(line)
   return value
 }
 
 const allocateVariable = (line: string) => {
   const [statement, name, first, ...values] = line.split(" ")
   if (statement !== "ㅇㅉ") return
-  if (!name || name.length <= 0 || statements.includes(name)) throw new Error("어쩔변수")
+  if (
+    !name ||
+    name.length <= 0 ||
+    statements.includes(name) ||
+    !name
+      .split("")
+      .map((v) => {
+        if (!["어", "쩔"].includes(v)) return 1
+      })
+      .includes(1)
+  )
+    throw new Error("어쩔변수")
   let allocatingValue = ""
   if (first === "티비") {
     const inputValue = input([first, ...values].join(" "))
@@ -80,7 +89,7 @@ const print = (line: string) => {
 const input = (line: string) => {
   const [statement, ...inputString] = line.split(" ")
   if (statement !== "티비") return
-  const inputUser = inputUtil(inputString.join(" ") + "\n")
+  const inputUser = ReadLine.question(inputString.join(" ") + "\n")
   return inputUser
 }
 
