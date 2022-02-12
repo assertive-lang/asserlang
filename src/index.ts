@@ -38,7 +38,7 @@ const getVariable = (line: string) => {
 const allocateVariable = (line: string) => {
   const [statement, name, first, ...values] = line.split(" ")
   if (statement !== "ㅇㅉ") return
-  if (!name || name.length <= 0) throw new Error("어쩔변수")
+  if (!name || name.length <= 0 || statements.includes(name)) throw new Error("어쩔변수")
   let allocatingValue = ""
   if (first === "티비") {
     const inputValue = input([first, ...values].join(" "))
