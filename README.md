@@ -79,7 +79,7 @@ by [chul0721](https://github.com/chul0721) & [sujang958](https://github.com/suja
 
 ```
 
-> 변수 "ㅋㅋ"에 입력값을 저장합니다.
+> 변수 "다이슨v15디텍트앱솔루트엑스트라청소기"에 입력값을 저장합니다.
 
 #### 출력
 
