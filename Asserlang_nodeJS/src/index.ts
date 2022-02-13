@@ -17,7 +17,8 @@ const statements = [
   "화났쥬?",
   "킹받쥬?",
   "우짤래미",
-  "저짤래미"
+  "저짤래미",
+  "무지개반사"
 ]
 
 const execute = async (code: string) => {
@@ -53,8 +54,6 @@ const run = async (lines: string[]) => {
       } else if (components.keyword === "저짤래미") {
         assignString(lines[line])
       }
-    } else {
-      console.log(String(components.value) ?? "")
     }
   }
 }
@@ -116,16 +115,17 @@ const toUnicode = (line: string) => {
 
 const getVariable = (line: string) => {
   if (line.startsWith("ㅌㅂ")) return input(line)
+  if (line.startsWith("안궁")) return callFunction(line) ?? null
   if (statements.includes(line)) return
-  const value = variables[line]
-  if (!value) return toNumber(line) === 0 ? null : toNumber(line)
-  return value
+  if (isPureNumber(line)) return toNumber(line).toString()
+  if (!variables[line]) return variables[line]
+  return null
 }
 
-const callFunction = (line: string) => {
+const callFunction = (line: string): any => {
   if (!line.startsWith("안궁")) return
   const [name, ...args] = line.replace("안궁", "").split("~")
-  subRoutines[name](args.map((v) => getVariable(v)))
+  return subRoutines[name](args.map((v) => getVariable(v)))
 }
 
 const declareFunction = (functionLines: string[]) => {
@@ -140,7 +140,19 @@ const declareFunction = (functionLines: string[]) => {
   for (const line of lines) {
     const lineComponents = getComponents(line)
     if (!lineComponents.doesStartWithKeyword) return
-    if (lineComponents.keyword === "어쩔" || lineComponents.keyword === "저쩔") {
+    if (lineComponents.keyword === "무지개반사") {
+      const returnVariable = lineComponents.values.join("~").trim()
+      functionComponents.push(
+        `return ${
+          args.includes(returnVariable)
+            ? returnVariable
+            : `${localVariables[name][returnVariable]}` ?? returnVariable.startsWith("ㅌㅂ")
+            ? `input("${returnVariable}")`
+            : `"${getVariable(returnVariable)}"`
+        }`
+      )
+      break
+    } else if (lineComponents.keyword === "어쩔" || lineComponents.keyword === "저쩔") {
       const [varName, ...varValue] = lineComponents.values
       if (varValue[0] === "ㅌㅂ") {
         functionComponents.push(
@@ -284,7 +296,14 @@ const print = (line: string) => {
   const components = getComponents(line)
   if (!components.doesStartWithKeyword) return
   if (components.keyword !== "ㅇㅉ") return
-  console.log(components.values.map((v) => getVariable(v)).join("~"))
+  console.log(
+    line
+      .trim()
+      .replace("ㅇㅉ", "")
+      .split(" ")
+      .map((v) => getVariable(v))
+      .join("~")
+  )
 }
 
 const input = (line: string) => {
