@@ -1,11 +1,12 @@
 # Asserlang 어쩔랭
 
 자바스크립트로 된 어쩔랭  
-by [chul0721](https://github.com/chul0721) & [sujang958](https://github.com/sujang958)
+Made with ♥️ by [chul0721](https://github.com/chul0721) & [sujang958](https://github.com/sujang958) in South Korea
 
 이 프로젝트는 개발 중인 프로젝트입니다.
 
-유행어를 본따 만든 [엄랭](https://github.com/rycont/umjunsik-lang)과 [몰랭](https://github.com/ArpaAP/mollang)과 [슈숙 언어](https://github.com/yf-dev/syusuk) 같은 언어들에 영감을 받아 만들게 되었습니다.
+유행어를 본따 만든 [엄랭](https://github.com/rycont/umjunsik-lang)과 [몰랭](https://github.com/ArpaAP/mollang)과 [슈숙 언어](https://github.com/yf-dev/syusuk) 같은 언어들에 영감을 받아 만들게 되었습니다.  
+영감을 받았으나 전체적인 구조와 체계는 많이 다릅니다.
 
 코드가 다소 이상하다고 느껴지신다면 언제든 PR로 리펙토링 해주시면 감사하겠습니다. 💻  
 그 외에도 PR은 환영입니다! 🙋
@@ -19,10 +20,8 @@ by [chul0721](https://github.com/chul0721) & [sujang958](https://github.com/suja
 ## 연산자
 
 ```
-
 ㅋ: +1를 의미합니다.
 ㅎ: -1를 의미합니다.
-
 ```
 
 ## 변수
@@ -30,11 +29,9 @@ by [chul0721](https://github.com/chul0721) & [sujang958](https://github.com/suja
 #### 선언
 
 ```
-
 쿠쿠루삥뽕
 어쩔 냉장고 ㅋㅋ
 슉슈슉슉
-
 ```
 
 > 변수 "냉장고"을 선언과 동시에 2라는 값으로 초기화 합니다.
@@ -47,15 +44,14 @@ by [chul0721](https://github.com/chul0721) & [sujang958](https://github.com/suja
 #### 할당
 
 ```
-
 쿠쿠루삥뽕
 어쩔 냉장고 ㅋㅋㅋ
 저쩔 냉장고 ㅋㅋ
 슉슈슉슉
-
 ```
 
 > 변수 "냉장고"을 선언하며 동시에 3이라는 값으로 초기화 합니다.
+>
 > 변수 "냉장고"에 2라는 값을 할당 해 줍니다.
 
 ## 입출력
@@ -63,45 +59,38 @@ by [chul0721](https://github.com/chul0721) & [sujang958](https://github.com/suja
 #### 입력
 
 ```
-
 쿠쿠루삥뽕
 ㅌㅂ
 슉슈슉슉
-
 ```
 
 > 사용자에게 입력을 받습니다.
 
 ```
-
 쿠쿠루삥뽕
-어쩔 다이슨v15디텍트앱솔루트엑스트라청소기 ㅌㅂ
+어쩔 다이슨v15디렉트앱솔루트엑스트라청소기 ㅌㅂ
 슉슈슉슉
-
 ```
 
-> 변수 "다이슨v15디텍트앱솔루트엑스트라청소기"에 입력값을 저장합니다.
+> 변수 "다이슨v15디렉트앱솔루트엑스트라청소기"에 입력값을 저장합니다.
 
 #### 출력
 
 ```
-
 쿠쿠루삥뽕
 어쩔 ㅇㅇㅈ ㅋㅋㅋㅋㅋ
 ㅇㅉ ㅇㅇㅈ
 슉슈슉슉
-
 ```
 
 > 결과: 5
+>
 > ㅇㅇㅈ 변수를 출력합니다.
 
 ```
-
 쿠쿠루삥뽕
 ㅇㅉ ㅌㅂ
 슉슈슉슉
-
 ```
 
 > 입력값을 출력합니다.
@@ -109,7 +98,6 @@ by [chul0721](https://github.com/chul0721) & [sujang958](https://github.com/suja
 ## 함수
 
 ```
-
 쿠쿠루삥뽕
 안물 함수이름 인자1 인자2
 어쩔 로컬변수 ㅋ
@@ -117,16 +105,31 @@ by [chul0721](https://github.com/chul0721) & [sujang958](https://github.com/suja
 ㅇㅉ 인자1
 ㅇㅉ 인자2
 안물
-
 안궁 함수이름 ㅋㅋㅋ ㅋㅋㅋㅋㅋ
-
 슉슈슉슉
-
 ```
 
 > 결과: 1 3 5
+>
 > 안물 키워드로 함수를 선언하고 안궁 키워드로 함수를 사용합니다.
+>
 > 함수 선언시의 블록 구분은 안물 키워드를 시작과 끝에 둠으로써 구분합니다.
+
+## 조건문
+
+```
+쿠쿠루삥뽕
+어쩔 개
+어쩔 냉장고 ㅋㅋ
+ㅇㅉ 냉장고
+화났쥬? 개 킹받쥬? 저쩔 냉장고 ㅋ
+ㅇㅉ 냉장고
+슉슈슉슉
+```
+
+> 결과: 2 1
+>
+> 화났쥬? (조건) 킹받쥬? (조건이 0일 때 실행할 코드)
 
 ## 실행
 
@@ -134,22 +137,26 @@ by [chul0721](https://github.com/chul0721) & [sujang958](https://github.com/suja
 최신 버전의 git과 node.js가 설치되어 있어야 합니다.
 
 ```
-
 $ git clone http://github.com/assertive-lang/asserlang
 $ cd asserlang
 $ npm i
 $ tsc
 $ node dist/index.js 파일명
-
 ```
 
 ## 에러
 
 - 아무것도 모르죠?
-  시작과 끝에 "쿠쿠루삥뽕"와 "슉슈슉슉"를 포함하지 않은 경우 발생하는 에러
+  - 시작과 끝에 "쿠쿠루삥뽕"와 "슉슈슉슉"를 포함하지 않은 경우 발생하는 에러
 - 어쩔변수
-  변수에 관련된 구문에서 발생한 에러
+  - 변수에 관련된 구문에서 발생한 에러
 - 어쩔파일
-  파일을 제대로 불러오지 못한 경우 발생하는 에러
+  - 파일을 제대로 불러오지 못한 경우 발생하는 에러
+- 안물
+  - 함수의 선언 과정에서 생긴 에러
+- 어쩔조건
+  - 조건문 코드에서 생긴 에러
+
+🥕
 
 ~~슉슈슉슉~~

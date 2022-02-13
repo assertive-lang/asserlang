@@ -12,6 +12,11 @@ const execute = async (code: string) => {
   const lines: string[] = code.replace(/\r/gi, "").split("\n")
   if (lines.shift() !== "쿠쿠루삥뽕") throw new Error("아무것도 모르죠?")
   if (lines.pop() !== "슉슈슉슉") throw new Error("아무것도 모르죠?")
+
+  run(lines)
+}
+
+const run = async (lines: any) => {
   for (const line in lines) {
     const [statement] = lines[line].split(" ")
     if (statement === "어쩔") {
@@ -23,12 +28,14 @@ const execute = async (code: string) => {
     } else if (statement === "ㅌㅂ") {
       input(lines[line])
     } else if (statement === "안물") {
-      const endIndex = lines.findIndex((v, i) => i !== Number(line) && v === "안물")
+      const endIndex = lines.findIndex((v: any, i: any) => i > Number(line) && v === "안물")
       if (endIndex <= -1) throw new Error("안물")
       const functionBlock = lines.splice(Number(line), endIndex)
       declareFunction(functionBlock)
     } else if (statement === "안궁") {
       callFunction(lines[line])
+    } else if (statement === "화났쥬?") {
+      conditionOperator(lines[line])
     }
   }
 }
@@ -105,6 +112,24 @@ const declareFunction = (functionLines: string[]) => {
   functionComponents.push("}")
   localVariables[name] = {}
   subRoutines[name] = eval(functionComponents.join("\n"))
+}
+
+const conditionOperator = (line: string) => {
+  let [statement, condition, isTrue, ...values]: string[] = line.split(" ")
+
+  if (statement !== "화났쥬?") return
+
+  const conditionValue = getVariable(condition)
+
+  if (conditionValue === "0") {
+    if (isTrue === "킹받쥬?") {
+      run(values.join(" "))
+    } else {
+      throw new Error("어쩔조건")
+    }
+  } else {
+    return
+  }
 }
 
 const declareVariable = (line: string) => {
