@@ -73,7 +73,7 @@ const declareFunction = (functionLines: string[]) => {
         const value = varValue.join(" ").trim()
         functionComponents.push(
           `localVariables.${name}.${varName} = ${
-            isPureNumber(value)
+            isPureNumber(value) // todo: number to string
               ? toNumber(value)
               : localVariables[name][value] ?? variables[value] ?? 0
           }`
