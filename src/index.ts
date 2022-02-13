@@ -28,7 +28,7 @@ const run = async (lines: any) => {
     } else if (statement === "ㅌㅂ") {
       input(lines[line])
     } else if (statement === "안물") {
-      const endIndex = lines.findIndex((v: any, i: any) => i > Number(line) && v === "안물")
+      const endIndex = lines.findIndex((v: any, i: any) => i !== Number(line) && v === "안물")
       if (endIndex <= -1) throw new Error("안물")
       const functionBlock = lines.splice(Number(line), endIndex)
       declareFunction(functionBlock)
