@@ -91,14 +91,23 @@ const getComponents = (
 const isPureNumber = (value: string) => {
   const add = value.split("").filter((v) => v === "ㅋ").length
   const subtract = value.split("").filter((v) => v === "ㅎ").length
-  if (add + subtract === value.length) return true
+  const index = value.split("").filter((v) => v === "ㅌ").length
+  if (add + subtract + index === value.length) return true
   else return false
 }
 
 const toNumber = (line: string) => {
-  const pluses = line.split("").filter((v) => v === "ㅋ").length
-  const minuses = line.split("").filter((v) => v === "ㅎ").length
-  return pluses - minuses
+  return Number(
+    line
+      .trim()
+      .split("ㅌ")
+      .map((number) => {
+        const pluses = number.split("").filter((v) => v === "ㅋ").length
+        const minuses = number.split("").filter((v) => v === "ㅎ").length
+        return pluses - minuses
+      })
+      .join("")
+  )
 }
 
 const toUnicode = (line: string) => {
