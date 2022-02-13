@@ -1,9 +1,10 @@
 # Asserlang 어쩔랭
 
-자바스크립트로 된 어쩔랭  
-Made with ♥️ by [chul0721](https://github.com/chul0721) & [sujang958](https://github.com/sujang958) in South Korea
+Made with ♥️ in South Korea by [chul0721](https://github.com/chul0721) & [sujang958](https://github.com/sujang958)
 
-이 프로젝트는 개발 중인 프로젝트입니다.
+이 프로젝트는 개발 중인 프로젝트입니다.  
+Node.JS 구현체: /Asserlang_nodeJS  
+Golang 구현체: /Asserlang_Golang
 
 유행어를 본따 만든 [엄랭](https://github.com/rycont/umjunsik-lang)과 [몰랭](https://github.com/ArpaAP/mollang)과 [슈숙 언어](https://github.com/yf-dev/syusuk) 같은 언어들에 영감을 받아 만들게 되었습니다.  
 영감을 받았으나 전체적인 구조와 체계는 많이 다릅니다.
@@ -133,6 +134,7 @@ Made with ♥️ by [chul0721](https://github.com/chul0721) & [sujang958](https:
 
 ## 실행
 
+#### Node.JS 구현체를 이용하여 실행
 터미널 및 콘솔에 아래 코드를 순서대로 입력하세요.
 최신 버전의 git과 node.js가 설치되어 있어야 합니다.
 
