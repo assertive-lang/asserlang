@@ -6,7 +6,7 @@ import fs from "fs"
 const variables: { [key: string]: any } = {}
 const localVariables: { [key: string]: { [key: string]: any } } = {}
 const subRoutines: { [key: string]: (args?: any[]) => void | any } = {}
-const statements = ["ㅇㅉ", "ㅌㅂ", "저쩔", "어쩔", "안물", "안물", "안궁"]
+const statements = ["ㅇㅉ", "ㅌㅂ", "저쩔", "어쩔", "안물", "안물", "안궁", "화났쥬?", "킹받쥬?"]
 
 const execute = async (code: string) => {
   const lines: string[] = code.replace(/\r/gi, "").split("\n")
@@ -15,26 +15,59 @@ const execute = async (code: string) => {
   run(lines)
 }
 
-const run = async (lines: any) => {
+const run = async (lines: string[]) => {
   for (const line in lines) {
-    const [statement] = lines[line].split(" ")
-    if (statement === "어쩔") {
-      declareVariable(lines[line])
-    } else if (statement === "저쩔") {
-      assignVariable(lines[line])
-    } else if (statement === "ㅇㅉ") {
-      print(lines[line])
-    } else if (statement === "ㅌㅂ") {
-      input(lines[line])
-    } else if (statement === "안물") {
-      const endIndex = lines.findIndex((v: any, i: any) => i !== Number(line) && v === "안물")
-      if (endIndex <= -1) throw new Error("안물")
-      const functionBlock = lines.splice(Number(line), endIndex)
-      declareFunction(functionBlock)
-    } else if (statement === "안궁") {
-      callFunction(lines[line])
-    } else if (statement === "화났쥬?") {
-      conditionOperator(lines[line])
+    const components = getComponents(lines[line])
+    if (components.doesStartWithKeyword) {
+      if (components.keyword === "어쩔") {
+        declareVariable(lines[line])
+      } else if (components.keyword === "저쩔") {
+        assignVariable(lines[line])
+      } else if (components.keyword === "ㅇㅉ") {
+        print(lines[line])
+      } else if (components.keyword === "ㅌㅂ") {
+        input(lines[line])
+      } else if (components.keyword === "안물") {
+        const endIndex = lines.findIndex((v: any, i: any) => i !== Number(line) && v === "안물")
+        if (endIndex <= -1) throw new Error("안물")
+        const functionBlock = lines.splice(Number(line), endIndex)
+        declareFunction(functionBlock)
+      } else if (components.keyword === "안궁") {
+        callFunction(lines[line])
+      } else if (components.keyword === "화났쥬?") {
+        conditionOperator(lines[line])
+      }
+    } else {
+      console.log(components.value ?? "")
+    }
+  }
+}
+
+const getComponents = (
+  line: string
+):
+  | {
+      doesStartWithKeyword: false
+      value: any
+    }
+  | {
+      doesStartWithKeyword: true
+      keyword: string
+      values: string[]
+    } => {
+  const [statement] = statements.filter((v) => line.startsWith(v))
+  if (!statement) {
+    if (isPureNumber(line)) return { doesStartWithKeyword: false, value: toNumber(line) }
+    else
+      return {
+        doesStartWithKeyword: false,
+        value: getVariable(line)
+      }
+  } else {
+    return {
+      doesStartWithKeyword: true,
+      keyword: statement,
+      values: line.trim().replace(statement, "").split(" ")
     }
   }
 }
@@ -47,30 +80,33 @@ const isPureNumber = (value: string) => {
 }
 
 const getVariable = (line: string) => {
-  if (line.split(" ")[0] === "ㅌㅂ") return input(line)
-  if (statements.includes(line.split(" ")[0])) return
+  if (line.startsWith("ㅌㅂ")) return input(line)
+  if (statements.includes(line)) return
   const value = variables[line]
   if (!value) return toNumber(line) === 0 ? null : toNumber(line)
   return value
 }
 
 const callFunction = (line: string) => {
-  const components = line.split(" ")
-  if (components.shift() !== "안궁") return
-  const [name, ...args] = components
+  if (!line.startsWith("안궁")) return
+  const [name, ...args] = line.replace("안궁", "").split(" ")
   subRoutines[name](args.map((v) => getVariable(v)))
 }
 
 const declareFunction = (functionLines: string[]) => {
   const [declare, ...lines] = functionLines
-  const [_, name, ...args] = declare.split(" ")
+  const declareComponents = getComponents(declare.trim())
+  if (!declareComponents.doesStartWithKeyword) return
+  if (declareComponents.keyword !== "안물") return
+  const [name, ...args] = declareComponents.values
   if (!name) throw new Error("안물함수이름")
   localVariables[name] = {}
   const functionComponents: string[] = [`([${args.map((arg) => `${arg},`).join(" ")}]) => {`]
   for (const line of lines) {
-    const [statement, ...values] = line.trim().split(" ")
-    if (statement === "어쩔" || statement === "저쩔") {
-      const [varName, ...varValue] = values
+    const lineComponents = getComponents(line)
+    if (!lineComponents.doesStartWithKeyword) return
+    if (lineComponents.keyword === "어쩔" || lineComponents.keyword === "저쩔") {
+      const [varName, ...varValue] = lineComponents.values
       if (varValue[0] === "ㅌㅂ") {
         functionComponents.push(
           `localVariables.${name}.${varName} = input("${varValue.join(" ").trim()}")`
@@ -90,9 +126,9 @@ const declareFunction = (functionLines: string[]) => {
             : localVariables[name][value] ?? variables[value] ?? 0
         }`
       }
-    } else if (statement === "ㅇㅉ") {
+    } else if (lineComponents.keyword === "ㅇㅉ") {
       functionComponents.push(
-        `console.log(${values
+        `console.log(String(${lineComponents.values
           .map((value) =>
             args.includes(value)
               ? value
@@ -102,10 +138,10 @@ const declareFunction = (functionLines: string[]) => {
                     : toNumber(value)
                 }"`
           )
-          .join(",")})`
+          .join(",")}))`
       )
-    } else if (statement === "ㅌㅂ") {
-      functionComponents.push(`input("${values.join(" ")}`)
+    } else if (lineComponents.keyword === "ㅌㅂ") {
+      functionComponents.push(`input("${lineComponents.values.join(" ")}`)
     }
   }
   functionComponents.push("}")
@@ -114,12 +150,14 @@ const declareFunction = (functionLines: string[]) => {
 }
 
 const conditionOperator = (line: string) => {
-  let [statement, condition, isTrue, ...values]: string[] = line.split(" ")
-  if (statement !== "화났쥬?") return
+  const components = getComponents(line)
+  if (!components.doesStartWithKeyword) return
+  if (components.keyword !== "화났쥬?") return
+  let [condition, isTrue, ...values]: string[] = components.values
   const conditionValue = getVariable(condition)
-  if (conditionValue === "0") {
+  if (String(conditionValue) === "0") {
     if (isTrue === "킹받쥬?") {
-      run(values.join(" "))
+      run([values.join(" ")])
     } else {
       throw new Error("어쩔조건")
     }
@@ -129,17 +167,19 @@ const conditionOperator = (line: string) => {
 }
 
 const declareVariable = (line: string) => {
-  const [statement, name, first, ...values] = line.split(" ")
-  if (statement !== "어쩔") return
+  const components = getComponents(line)
+  if (!components.doesStartWithKeyword) return
+  if (components.keyword !== "어쩔") return
+  const [name, first, ...values] = components.values
   if (!name || name.length <= 0 || statements.includes(name) || isPureNumber(name))
-    throw new Error("어쩔변수")
+    throw new Error("어쩔변수이름")
   let allocatingValue = ""
   if (first) {
     if (first === "ㅌㅂ") {
-      const inputValue = input([first, ...values].join(" "))
+      const inputValue = input(first + values.join(" "))
       if (inputValue) allocatingValue = inputValue
     } else if (isPureNumber(first)) {
-      allocatingValue = String(toNumber([first, ...values].join(" ")))
+      allocatingValue = String(toNumber(first + values.join(" ")))
     } else {
       allocatingValue = "0"
     }
@@ -150,17 +190,19 @@ const declareVariable = (line: string) => {
 }
 
 const assignVariable = (line: string) => {
-  const [statement, name, ...values] = line.split(" ")
-  if (statement !== "저쩔") return
+  const components = getComponents(line)
+  if (!components.doesStartWithKeyword) return
+  if (components.keyword !== "저쩔") return
+  const [name, ...values] = components.values
   if (!name || name.length <= 0) throw new Error("어쩔변수")
   const doesVariableExist = getVariable(name)
   if (doesVariableExist === null) throw new Error("어쩔변수")
   let value = ""
   if (name === "ㅌㅂ") {
-    const inputValue = input(values.join(" "))
+    const inputValue = input("ㅌㅂ" + values.join(" ").trim())
     if (inputValue) value = inputValue
   } else {
-    value = String(toNumber(values.join(" ")))
+    value = String(toNumber(values.join(" ").trim()))
   }
   variables[name] = value
 }
@@ -172,15 +214,17 @@ const toNumber = (line: string) => {
 }
 
 const print = (line: string) => {
-  const [statement, ...printOut] = line.split(" ")
-  if (statement !== "ㅇㅉ") return
-  console.log(printOut.map((v) => getVariable(v)).join(" "))
+  const components = getComponents(line)
+  if (!components.doesStartWithKeyword) return
+  if (components.keyword !== "ㅇㅉ") return
+  console.log(components.values.map((v) => getVariable(v)).join(" "))
 }
 
 const input = (line: string) => {
-  const [statement, ...inputString] = line.split(" ")
-  if (statement !== "ㅌㅂ") return
-  const inputUser = ReadLine.question(inputString.join(" ") + "\n")
+  const components = getComponents(line)
+  if (!components.doesStartWithKeyword) return
+  if (components.keyword !== "ㅌㅂ") return
+  const inputUser = ReadLine.question(components.values.join(" ") + "\n", { encoding: "utf-8" })
   return inputUser
 }
 
