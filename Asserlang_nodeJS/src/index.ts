@@ -38,7 +38,7 @@ const run = async (lines: string[]) => {
         conditionOperator(lines[line])
       }
     } else {
-      console.log(components.value ?? "")
+      console.log(String(components.value) ?? "")
     }
   }
 }
