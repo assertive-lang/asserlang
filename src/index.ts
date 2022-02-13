@@ -12,7 +12,6 @@ const execute = async (code: string) => {
   const lines: string[] = code.replace(/\r/gi, "").split("\n")
   if (lines.shift() !== "쿠쿠루삥뽕") throw new Error("아무것도 모르죠?")
   if (lines.pop() !== "슉슈슉슉") throw new Error("아무것도 모르죠?")
-
   run(lines)
 }
 
@@ -116,11 +115,8 @@ const declareFunction = (functionLines: string[]) => {
 
 const conditionOperator = (line: string) => {
   let [statement, condition, isTrue, ...values]: string[] = line.split(" ")
-
   if (statement !== "화났쥬?") return
-
   const conditionValue = getVariable(condition)
-
   if (conditionValue === "0") {
     if (isTrue === "킹받쥬?") {
       run(values.join(" "))
