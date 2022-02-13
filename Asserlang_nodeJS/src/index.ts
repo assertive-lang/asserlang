@@ -153,14 +153,11 @@ const conditionOperator = (line: string) => {
   const components = getComponents(line)
   if (!components.doesStartWithKeyword) return
   if (components.keyword !== "화났쥬?") return
-  let [condition, isTrue, ...values]: string[] = components.values
+  if (components.values.join("").trim().indexOf("킹받쥬?") <= -1) throw new Error("어쩔조건")
+  const [condition, ...codes] = components.values.join(" ").trim().split("킹받쥬?")
   const conditionValue = getVariable(condition)
   if (String(conditionValue) === "0") {
-    if (isTrue === "킹받쥬?") {
-      run([values.join(" ")])
-    } else {
-      throw new Error("어쩔조건")
-    }
+    run([codes.join(" ").trim()])
   } else {
     return
   }
