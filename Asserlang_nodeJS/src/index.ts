@@ -3,6 +3,7 @@ import { program } from "commander"
 import path from "path"
 import fs from "fs"
 
+let codesSrc: string[] = []
 const variables: { [key: string]: any } = {}
 const localVariables: { [key: string]: { [key: string]: any } } = {}
 const subRoutines: { [key: string]: (args?: any[]) => void | any } = {}
@@ -24,16 +25,34 @@ const statements = [
 
 const execute = async (code: string) => {
   const lines: string[] = code.replace(/\r/gi, "").split("\n")
+  codesSrc = [...lines]
   if (lines.shift() !== "쿠쿠루삥뽕") throw new Error("아무것도 모르죠?")
   if (lines.pop() !== "슉슈슉슉") throw new Error("아무것도 모르죠?")
   run(lines)
 }
 
 const run = async (lines: string[]) => {
-  for (const line in lines) {
+  for (let line in lines) {
     const components = getComponents(lines[line])
     if (components.doesStartWithKeyword) {
       switch (components.keyword) {
+        case ";;":
+          const targetLine = toNumber(components.values.join("").trim())
+          if (codesSrc[targetLine - 1]) {
+            run(codesSrc.slice(targetLine - 1, codesSrc.length - 1))
+            // const jumpingLines = lines.slice(targetLine, Number(line))
+            // console.log(jumpingLines)
+            // console.log([
+            //   ...lines.slice(0, targetLine),
+            //   ...jumpingLines,
+            //   ...jumpingLines,
+            //   lines[line] + "ㅋㅋ",
+            //   ...lines.slice(Number(line) + 1, lines.length)
+            // ])
+          } else {
+            throw new Error("어쩔GOTO인덱스;;")
+          }
+          break
         case "어쩔":
           declareVariable(lines[line])
           break
@@ -144,7 +163,7 @@ const getVariable = (line: string) => {
   if (line.startsWith("안궁")) return callFunction(line) ?? null
   if (statements.includes(line)) return
   if (isPureNumber(line)) return toNumber(line).toString()
-  if (!variables[line]) return variables[line]
+  if (variables[line]) return variables[line]
   return null
 }
 
