@@ -1,8 +1,7 @@
 # Asserlang 어쩔랭
 
 Made with ♥️ in South Korea by [chul0721](https://github.com/chul0721) & [sujang958](https://github.com/sujang958)
-
-이 프로젝트는 개발 중인 프로젝트입니다.  
+ 
 [디스코드 서버에 참가하여 어쩔랭에 대하여 의견을 남겨주세요!](https://discord.gg/nZEEhDKnvb)  
 | 종류 | 경로 | 제작자 | 상태 |
 |------|------|------|------|
@@ -40,7 +39,7 @@ Made with ♥️ in South Korea by [chul0721](https://github.com/chul0721) & [su
 
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
-# 문법
+# 문법 [v1]
 
 무조건 코드의 시작과 끝에는 각각 '쿠쿠루삥뽕'와 '슉슈슉슉'가 포함되어야 합니다.  
 키워드는 변수의 이름이 될 수 없습니다.  
@@ -62,7 +61,7 @@ Made with ♥️ in South Korea by [chul0721](https://github.com/chul0721) & [su
 
 ## 변수
 
-## 수를 담는 변수
+## 정수를 담는 변수
 
 #### 선언
 
@@ -93,20 +92,22 @@ Made with ♥️ in South Korea by [chul0721](https://github.com/chul0721) & [su
 >
 > 변수 "냉장고"에 2라는 값을 할당 해 줍니다.
 
-## 유니코드를 담는 변수
+## 아스키코드를 담는 변수
+
+16진수로 표기되는 유니코드 중 16진수의 값이 정수인 유니코드의 경우도 [일부](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/fromCharCode) 지원합니다.
 
 #### 선언
 
 ```
 쿠쿠루삥뽕
-우짤래미냉장고~ㅋㅋㅋㅋㅌㅋㅋㅋㅌㅋㅋㅋㅋ
+우짤래미냉장고~ㅋㅋㅋㅋㅋㅋㅌㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ
 ㅇㅉ냉장고
 슉슈슉슉
 ```
 
-> 변수 "냉장고"을 선언과 동시에 "H"라는 값으로 초기화 합니다.
+> 변수 "냉장고"을 선언과 동시에 "B"라는 값으로 초기화 합니다.
 >
-> - 변수 선언 시 초기화를 하지 않을 경우 0에 해당하는 유니코드 값이 할당됩니다.
+> - 변수 선언 시 초기화를 하지 않을 경우 0에 해당하는 아스키코드 값이 할당됩니다.
 >   - 예) 어쩔초고속진공블랜딩믹서기
 
 #### 할당
@@ -201,7 +202,7 @@ Made with ♥️ in South Korea by [chul0721](https://github.com/chul0721) & [su
 
 > 결과: 22
 >
-> 무지개반사{Return할 값}
+> 무지개반사{반환할 값}
 
 ## 조건문
 
@@ -261,6 +262,10 @@ $ node dist/index.js 파일명
   - 함수의 선언 과정에서 생긴 에러
 - 어쩔조건
   - 조건문 코드에서 생긴 에러
+- 어쩔GOTO인덱스;;
+  - 루프에서 발생한 에러
+- 어쩔변수이름
+  - 변수 이름에 관한 에러
 
 🥕
 
