@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
+  "scripts": {
+    "test": "ts-node src/index.ts examples/test.astv"
+  },
   "devDependencies": {
     "@types/node": "^17.0.17",
     "@types/readline-sync": "^1.4.4",
