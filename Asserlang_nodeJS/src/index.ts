@@ -108,23 +108,19 @@ const toNumber = (line: string) => {
     return pluses - minuses
   }
   return Number(
-    line
-      .trim()
-      .split("ㅌ")
-      .map((number) => {
-        const pluses = number.split("").filter((v) => v === "ㅋ").length
-        const minuses = number.split("").filter((v) => v === "ㅎ").length
-        return pluses - minuses
-      })
-      .map((n, i, a) => {
-        if (a[i + 1]) {
-          const multipliedNumber = Number(n * a[i + 1])
-          a[i + 1] = multipliedNumber
-          return multipliedNumber
-        }
-      })
-      .filter((v) => v)
-      .reverse()[0] ?? 0
+    eval(
+      line
+        .trim()
+        .split("ㅌ")
+        .map((number) => {
+          const pluses = number.split("").filter((v) => v === "ㅋ").length
+          const minuses = number.split("").filter((v) => v === "ㅎ").length
+          return pluses - minuses
+        })
+        .filter((v) => v)
+        .join("*")
+        .trim()
+    )
   )
 }
 
