@@ -25,7 +25,7 @@ Made with ♥️ in South Korea by [chul0721](https://github.com/chul0721) & [su
 <!-- markdownlint-disable -->
 <table>
   <tr>
-    <td align="center"><a href="https://github.com/c3nb"><img src="https://avatars.githubusercontent.com/u/73321185?v=4?s=100" width="100px;" alt=""/><br /><sub><b>C#Newbie</b></sub></a><br /><a href="https://github.com/assertive-lang/asserlang/commits?author=c3nb" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/c3nb"><img src="https://avatars.githubusercontent.com/u/73321185?v=4?s=100" width="100px;" alt=""/><br /><sub><b>C#Newbie</b></sub></a><br /><a href="https://github.com/assertive-lang/asserlang/commits?author=c3nb" title="Platform">📦</a></td>
     <td align="center"><a href="https://github.com/wjdqhry"><img src="https://avatars.githubusercontent.com/u/30039641?v=4?s=100" width="100px;" alt=""/><br /><sub><b>정보교</b></sub></a><br /><a href="https://github.com/assertive-lang/asserlang/commits?author=wjdqhry" title="Code">💻</a></td>
   </tr>
 </table>
