@@ -8,7 +8,7 @@ Made with ♥️ in South Korea by [chul0721](https://github.com/chul0721) & [su
 |------|------|------|------|
 | Node.JS 구현체 | [/Asserlang_nodeJS](https://github.com/assertive-lang/asserlang/tree/main/Asserlang_nodeJS) | chul0721, sujang958 | v1 |
 | C# 구현체 | [/Asserlang_CSharp](https://github.com/assertive-lang/asserlang/tree/main/Asserlang_CSharp) | c3nb | v1 |
-| Go 구현체 | [/Asserlang_Go](https://github.com/assertive-lang/asserlang/tree/main/Asserlang_Go) |  | on process |
+| Go 구현체 | [/Asserlang_Go](https://github.com/assertive-lang/asserlang/tree/main/Asserlang_Go) | | on process |
 | AsserFuck Rust 구현체 | [/extras/AsserFuck_Rust](https://github.com/assertive-lang/asserlang/tree/main/Asserlang_Go) | sujang958 | v1 |
 
 유행어를 본따 만든 [엄랭](https://github.com/rycont/umjunsik-lang), [몰랭](https://github.com/ArpaAP/mollang), 그리고 [슈숙 언어](https://github.com/yf-dev/syusuk)와 같은 언어들에 영감을 받아 만들게 되었습니다.
@@ -16,11 +16,14 @@ Made with ♥️ in South Korea by [chul0721](https://github.com/chul0721) & [su
 코드가 다소 이상하다고 느껴지신다면 언제든 PR로 리펙토링 해주시면 감사하겠습니다. 💻  
 그 외에도 PR은 환영입니다! 🙋
 
-> 이 문서는 표준 구현체인 Node.js 기준으로 작성되었습니다.
+> 이 문서는 표준 구현체인 Node.js 구현체 기준으로 작성되었습니다.
 
 ## 도움을 주신 분들 ✨
+
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+
 [![All Contributors](https://img.shields.io/badge/all_contributors-2-orange.svg?style=flat-square)](#contributors-)
+
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->
@@ -96,12 +99,12 @@ Made with ♥️ in South Korea by [chul0721](https://github.com/chul0721) & [su
 
 ```
 쿠쿠루삥뽕
-우짤래미냉장고~ㅋㅋㅋㅋㅋㅋㅋㅌㅋㅋㅋㅋㅋㅋㅋㅋ
+우짤래미냉장고~ㅋㅋㅋㅋㅌㅋㅋㅋㅌㅋㅋㅋㅋ
 ㅇㅉ냉장고
 슉슈슉슉
 ```
 
-> 변수 "냉장고"을 선언과 동시에 "C"라는 값으로 초기화 합니다.
+> 변수 "냉장고"을 선언과 동시에 "H"라는 값으로 초기화 합니다.
 >
 > - 변수 선언 시 초기화를 하지 않을 경우 0에 해당하는 유니코드 값이 할당됩니다.
 >   - 예) 어쩔초고속진공블랜딩믹서기
@@ -110,15 +113,15 @@ Made with ♥️ in South Korea by [chul0721](https://github.com/chul0721) & [su
 
 ```
 쿠쿠루삥뽕
-우짤래미냉장고~ㅋㅋㅋㅋㅋㅋㅋㅌㅋㅋㅋㅋㅋㅋㅋㅋ
-저짤래미냉장고~ㅋㅋㅋㅋㅋㅋㅋㅌㅋㅋㅋㅋㅋ
+우짤래미냉장고~ㅋㅋㅋㅋㅌㅋㅋㅋㅌㅋㅋㅋㅋ
+저짤래미냉장고~ㅋㅋㅌㅋㅋㅋㅋㅋㅌㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋㅋ
 ㅇㅉ냉장고
 슉슈슉슉
 ```
 
-> 변수 "냉장고"을 선언하며 동시에 "C"라는 값으로 초기화 합니다.
+> 변수 "냉장고"을 선언하며 동시에 "H"라는 값으로 초기화 합니다.
 >
-> 변수 "냉장고"에 "A"라는 값을 할당 해 줍니다.
+> 변수 "냉장고"에 "ɥ"라는 값을 할당 해 줍니다.
 
 ## 입출력
 
