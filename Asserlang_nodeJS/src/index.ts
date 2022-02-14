@@ -96,16 +96,31 @@ const isPureNumber = (value: string) => {
 }
 
 const toNumber = (line: string) => {
-  return Number(
-    line
+  if (!line.includes("ㅌ")) {
+    const pluses = line
       .trim()
-      .split("ㅌ")
-      .map((number) => {
-        const pluses = number.split("").filter((v) => v === "ㅋ").length
-        const minuses = number.split("").filter((v) => v === "ㅎ").length
-        return pluses - minuses
-      })
-      .join("")
+      .split("")
+      .filter((v) => v === "ㅋ").length
+    const minuses = line
+      .trim()
+      .split("")
+      .filter((v) => v === "ㅎ").length
+    return pluses - minuses
+  }
+  return Number(
+    eval(
+      line
+        .trim()
+        .split("ㅌ")
+        .map((number) => {
+          const pluses = number.split("").filter((v) => v === "ㅋ").length
+          const minuses = number.split("").filter((v) => v === "ㅎ").length
+          return pluses - minuses
+        })
+        .filter((v) => v)
+        .join("*")
+        .trim()
+    )
   )
 }
 
