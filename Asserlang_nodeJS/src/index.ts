@@ -3,6 +3,7 @@ import { program } from "commander"
 import path from "path"
 import fs from "fs"
 
+let codesSrc: string[] = []
 const variables: { [key: string]: any } = {}
 const localVariables: { [key: string]: { [key: string]: any } } = {}
 const subRoutines: { [key: string]: (args?: any[]) => void | any } = {}
@@ -18,35 +19,70 @@ const statements = [
   "킹받쥬?",
   "우짤래미",
   "저짤래미",
-  "무지개반사"
+  "무지개반사",
+  ";;"
 ]
 
 const execute = async (code: string) => {
   const lines: string[] = code.replace(/\r/gi, "").split("\n")
+  codesSrc = [...lines]
   if (lines.shift() !== "쿠쿠루삥뽕") throw new Error("아무것도 모르죠?")
   if (lines.pop() !== "슉슈슉슉") throw new Error("아무것도 모르죠?")
   run(lines)
 }
 
 const run = async (lines: string[]) => {
-  for (const line in lines) {
+  for (let line in lines) {
     const components = getComponents(lines[line])
     if (components.doesStartWithKeyword) {
       switch (components.keyword) {
-        case "어쩔": declareVariable(lines[line]); break
-        case "저쩔": assignVariable(lines[line]); break
-        case "ㅇㅉ": print(lines[line]); break
-        case "ㅌㅂ": input(lines[line]); break
-        case "안물": 
-            const endIndex = lines.findIndex((v: any, i: any) => i !== Number(line) && v === "안물")
-            if (endIndex <= -1) throw new Error("안물")
-            const functionBlock = lines.splice(Number(line), endIndex)
-            declareFunction(functionBlock)
-            break
-        case "안궁": callFunction(lines[line]); break
-        case "화났쥬?": conditionOperator(lines[line]); break
-        case "우짤래미": declareString(lines[line]); break
-        case "저짤래미": assignString(lines[line]); break
+        case ";;":
+          const targetLine = toNumber(components.values.join("").trim())
+          if (codesSrc[targetLine - 1]) {
+            run(codesSrc.slice(targetLine - 1, codesSrc.length - 1))
+            // const jumpingLines = lines.slice(targetLine, Number(line))
+            // console.log(jumpingLines)
+            // console.log([
+            //   ...lines.slice(0, targetLine),
+            //   ...jumpingLines,
+            //   ...jumpingLines,
+            //   lines[line] + "ㅋㅋ",
+            //   ...lines.slice(Number(line) + 1, lines.length)
+            // ])
+          } else {
+            throw new Error("어쩔GOTO인덱스;;")
+          }
+          break
+        case "어쩔":
+          declareVariable(lines[line])
+          break
+        case "저쩔":
+          assignVariable(lines[line])
+          break
+        case "ㅇㅉ":
+          print(lines[line])
+          break
+        case "ㅌㅂ":
+          input(lines[line])
+          break
+        case "안물":
+          const endIndex = lines.findIndex((v: any, i: any) => i !== Number(line) && v === "안물")
+          if (endIndex <= -1) throw new Error("안물")
+          const functionBlock = lines.splice(Number(line), endIndex)
+          declareFunction(functionBlock)
+          break
+        case "안궁":
+          callFunction(lines[line])
+          break
+        case "화났쥬?":
+          conditionOperator(lines[line])
+          break
+        case "우짤래미":
+          declareString(lines[line])
+          break
+        case "저짤래미":
+          assignString(lines[line])
+          break
       }
     }
   }
@@ -66,8 +102,7 @@ const getComponents = (
     } => {
   const statement = statements.find((v) => line.startsWith(v))
   if (!statement) {
-    if (isPureNumber(line))
-     return { doesStartWithKeyword: false, value: toNumber(line) }
+    if (isPureNumber(line)) return { doesStartWithKeyword: false, value: toNumber(line) }
     else
       return {
         doesStartWithKeyword: false,
@@ -128,7 +163,7 @@ const getVariable = (line: string) => {
   if (line.startsWith("안궁")) return callFunction(line) ?? null
   if (statements.includes(line)) return
   if (isPureNumber(line)) return toNumber(line).toString()
-  if (!variables[line]) return variables[line]
+  if (variables[line]) return variables[line]
   return null
 }
 
