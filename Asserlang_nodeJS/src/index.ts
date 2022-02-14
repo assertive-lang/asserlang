@@ -96,6 +96,17 @@ const isPureNumber = (value: string) => {
 }
 
 const toNumber = (line: string) => {
+  if (!line.includes("ㅌ")) {
+    const pluses = line
+      .trim()
+      .split("")
+      .filter((v) => v === "ㅋ").length
+    const minuses = line
+      .trim()
+      .split("")
+      .filter((v) => v === "ㅎ").length
+    return pluses - minuses
+  }
   return Number(
     line
       .trim()
@@ -105,7 +116,15 @@ const toNumber = (line: string) => {
         const minuses = number.split("").filter((v) => v === "ㅎ").length
         return pluses - minuses
       })
-      .join("")
+      .map((n, i, a) => {
+        if (a[i + 1]) {
+          const multipliedNumber = Number(n * a[i + 1])
+          a[i + 1] = multipliedNumber
+          return multipliedNumber
+        }
+      })
+      .filter((v) => v)
+      .reverse()[0] ?? 0
   )
 }
 
