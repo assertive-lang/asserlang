@@ -3,7 +3,7 @@
 Made with ♥️ in South Korea by [chul0721](https://github.com/chul0721) & [sujang958](https://github.com/sujang958)
 
 이 프로젝트는 개발 중인 프로젝트입니다.  
-[디스코드 서버에 참가하여 어쩔랭 개발에 기여하기](https://discord.gg/YBZd39qVfF)  
+[디스코드 서버에 참가하여 어쩔랭에 대하여 의견을 남겨주세요!](https://discord.gg/nZEEhDKnvb)  
 | 종류 | 경로 | 제작자 | 상태 |
 |------|------|------|------|
 | Node.JS 구현체 | [/Asserlang_nodeJS](https://github.com/assertive-lang/asserlang/tree/main/Asserlang_nodeJS) | chul0721, sujang958 | v1 |
