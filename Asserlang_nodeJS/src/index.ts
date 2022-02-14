@@ -32,27 +32,21 @@ const run = async (lines: string[]) => {
   for (const line in lines) {
     const components = getComponents(lines[line])
     if (components.doesStartWithKeyword) {
-      if (components.keyword === "어쩔") {
-        declareVariable(lines[line])
-      } else if (components.keyword === "저쩔") {
-        assignVariable(lines[line])
-      } else if (components.keyword === "ㅇㅉ") {
-        print(lines[line])
-      } else if (components.keyword === "ㅌㅂ") {
-        input(lines[line])
-      } else if (components.keyword === "안물") {
-        const endIndex = lines.findIndex((v: any, i: any) => i !== Number(line) && v === "안물")
-        if (endIndex <= -1) throw new Error("안물")
-        const functionBlock = lines.splice(Number(line), endIndex)
-        declareFunction(functionBlock)
-      } else if (components.keyword === "안궁") {
-        callFunction(lines[line])
-      } else if (components.keyword === "화났쥬?") {
-        conditionOperator(lines[line])
-      } else if (components.keyword === "우짤래미") {
-        declareString(lines[line])
-      } else if (components.keyword === "저짤래미") {
-        assignString(lines[line])
+      switch (components.keyword) {
+        case "어쩔": declareVariable(lines[line]); break
+        case "저쩔": assignVariable(lines[line]); break
+        case "ㅇㅉ": print(lines[line]); break
+        case "ㅌㅂ": input(lines[line]); break
+        case "안물": 
+            const endIndex = lines.findIndex((v: any, i: any) => i !== Number(line) && v === "안물")
+            if (endIndex <= -1) throw new Error("안물")
+            const functionBlock = lines.splice(Number(line), endIndex)
+            declareFunction(functionBlock)
+            break
+        case "안궁": callFunction(lines[line]); break
+        case "화났쥬?": conditionOperator(lines[line]); break
+        case "우짤래미": declareString(lines[line]); break
+        case "저짤래미": assignString(lines[line]); break
       }
     }
   }
@@ -70,9 +64,10 @@ const getComponents = (
       keyword: string
       values: string[]
     } => {
-  const [statement] = statements.filter((v) => line.startsWith(v))
+  const statement = statements.find((v) => line.startsWith(v))
   if (!statement) {
-    if (isPureNumber(line)) return { doesStartWithKeyword: false, value: toNumber(line) }
+    if (isPureNumber(line))
+     return { doesStartWithKeyword: false, value: toNumber(line) }
     else
       return {
         doesStartWithKeyword: false,
