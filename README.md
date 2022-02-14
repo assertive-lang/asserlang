@@ -53,7 +53,7 @@ Made with ♥️ in South Korea by [chul0721](https://github.com/chul0721) & [su
 
 > 예) ㅋㅋㅋㅋㅋㅌㅋㅋㅌㅋㅋㅋㅋ = 4 x 2 x 4
 >
-> 예) ㅋㅋㅎㅌㅋ = 2 x 1
+> 예) ㅋㅋㅎㅌㅋ = 1 x 1
 
 ## 변수
 
