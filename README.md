@@ -3,11 +3,13 @@
 Made with ♥️ in South Korea by [chul0721](https://github.com/chul0721) & [sujang958](https://github.com/sujang958)
 
 이 프로젝트는 개발 중인 프로젝트입니다.  
-| 구현체 | 경로 | 제작자 | 상태 |
+[디스코드 서버에 참가하여 어쩔랭 개발에 기여하기](https://discord.gg/YBZd39qVfF)  
+| 종류 | 경로 | 제작자 | 상태 |
 |------|------|------|------|
 | Node.JS 구현체 | [/Asserlang_nodeJS](https://github.com/assertive-lang/asserlang/tree/main/Asserlang_nodeJS) | chul0721, sujang958 | v1 |
 | C# 구현체 | [/Asserlang_CSharp](https://github.com/assertive-lang/asserlang/tree/main/Asserlang_CSharp) | c3nb | v1 |
 | Go 구현체 | [/Asserlang_Go](https://github.com/assertive-lang/asserlang/tree/main/Asserlang_Go) |  | on process |
+| AsserFuck Rust 구현체 | [/extras/AsserFuck_Rust](https://github.com/assertive-lang/asserlang/tree/main/Asserlang_Go) | sujang958 | v1 |
 
 유행어를 본따 만든 [엄랭](https://github.com/rycont/umjunsik-lang), [몰랭](https://github.com/ArpaAP/mollang), 그리고 [슈숙 언어](https://github.com/yf-dev/syusuk)와 같은 언어들에 영감을 받아 만들게 되었습니다.
 
