@@ -22,6 +22,15 @@
       "contributions": [
         "platform"
       ]
+    },
+    {
+      "login": "hwan809",
+      "name": "hwan809",
+      "avatar_url": "https://avatars.githubusercontent.com/u/55339366?v=4",
+      "profile": "https://github.com/hwan809",
+      "contributions": [
+        "platform"
+      ]
     }
   ],
   "badgeTemplate": "[![All Contributors](https://img.shields.io/badge/all_contributors-<%= contributors.length %>-orange.svg?style=flat-square)](#contributors)",
