@@ -9,7 +9,8 @@ Made with ♥️ in South Korea by [chul0721](https://github.com/chul0721) & [su
 | C# 구현체 | [/Asserlang_CSharp](https://github.com/assertive-lang/asserlang/tree/main/Asserlang_CSharp) | c3nb | v1 |
 | Python 구현체 | [/Asserlang_Python](https://github.com/assertive-lang/asserlang/tree/main/Asserlang_Python) | hwan809 | on process |
 | Go 구현체 | [/Asserlang_Go](https://github.com/assertive-lang/asserlang/tree/main/Asserlang_Go) | | on process |
-| AsserFuck Rust 구현체 | [/extras/AsserFuck_Rust](https://github.com/assertive-lang/asserlang/tree/main/Asserlang_Go) | sujang958 | v1 |
+| AsserFuck Rust 구현체 | [/extras/AsserFuck_Rust](https://github.com/assertive-lang/asserlang/tree/main/extras/AsserFuck_Rust) | sujang958 | v1 |
+| Python3 인터랙티브 구현체 | [/Asserlang_Interactive_Python3](https://github.com/assertive-lang/asserlang/tree/main/Asserlang_Interactive_Python3) | sangchoo1201 | on process |
 
 유행어를 본따 만든 [엄랭](https://github.com/rycont/umjunsik-lang), [몰랭](https://github.com/ArpaAP/mollang), 그리고 [슈숙 언어](https://github.com/yf-dev/syusuk)와 같은 언어들에 영감을 받아 만들게 되었습니다.
 
