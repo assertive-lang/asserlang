@@ -55,7 +55,7 @@ Made with ♥️ in South Korea by [chul0721](https://github.com/chul0721) & [su
 ㅌ: 곱하기를 의미합니다.
 ```
 
-> 예) ㅋㅋㅋㅋㅋㅌㅋㅋㅌㅋㅋㅋㅋ = 4 x 2 x 4
+> 예) ㅋㅋㅋㅋㅋㅌㅋㅋㅌㅋㅋㅋㅋ = 5 x 2 x 4
 >
 > 예) ㅋㅋㅎㅌㅋ = 1 x 1
 
