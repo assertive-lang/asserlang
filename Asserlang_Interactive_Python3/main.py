@@ -63,6 +63,7 @@ class asserlang:
             if self.return_value is None:
                 return None
             result_last = self.return_value
+            self.return_value = False
             value = value.split("안궁")[0]
         result = 0
         var = self.funcs[-1].var
