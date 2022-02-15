@@ -25,7 +25,7 @@ class asserlang:
         self.exec = (None, None, None,
                      self.make_var, self.assign_var, self.make_var_uni, self.assign_var_uni,
                      self.print, None, self.make_func, self.call_func,
-                     self.retn,)# self.condition, None)
+                     self.retn, self.condition, None)
         self.call = {}
         self.funcs = [func("__main__", 1, {})]
         self.lines = []
@@ -91,6 +91,21 @@ class asserlang:
                 i = i[len(j):]
         result += result_last
         return chr(result) if return_uni else result
+
+    def condition(self, line):
+        cnt = line.count("킹받쥬?")
+        if cnt == 0:
+            self.error("어쩔조건: 킹받쥬?가 없음")
+            return
+        if cnt > 1:
+            self.error(f"어쩔조건: 킹받쥬?가 {cnt}개 있음")
+            return
+        condition, line = line.split("킹받쥬?")
+        value = self.calc(condition)
+        if value is None:
+            return
+        if value == 0:
+            self.execute_line(line)
 
     def check_name(self, name):
         for i in self.keywords:
@@ -277,6 +292,7 @@ class asserlang:
                     self.error("실행놈아: 실행 가능한 구문이 아님")
                     return
                 do(line)
+                return
 
     def execute(self):
         print("asserlang-python interpreter v1.0")
