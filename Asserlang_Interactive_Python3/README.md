@@ -1,16 +1,15 @@
-# Asserlang Python 어쩔랭 파이썬
+# Asserlang Interactive-Python3
+어쩔랭 인터랙티브 파이썬  
 
 Made with ♥️ in South Korea by [sangchoo1201](https://github.com/sangchoo1201)
  
 [디스코드 서버에 참가하여 어쩔랭에 대하여 의견을 남겨주세요!](https://discord.gg/nZEEhDKnvb)  
 
-> 본 문서는 표준 구현체가 아닌 Python3 구현체 기준으로 작성되었습니다.
+> 본 문서는 표준 구현체가 아닌 Interactive-Python3 구현체 기준으로 작성되었습니다.
 
 # 문법 [Python v1]
 
-무조건 코드의 시작과 끝에는 각각 '쿠쿠루삥뽕'와 '슉슈슉슉'가 포함되어야 합니다.  
 키워드는 변수의 이름이 될 수 없습니다.  
-파일 확장자는 .astv를 사용합니다.  
 띄어쓰기 대신 `~`를 사용합니다.  
 줄바꿈을 통해 코드를 인식합니다.
 
