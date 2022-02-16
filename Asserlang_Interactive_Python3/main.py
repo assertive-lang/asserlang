@@ -299,7 +299,7 @@ class asserlang:
                 return
 
     def execute(self):
-        print("asserlang-python interpreter v1.0")
+        print("asserlang-python interpreter v1.3")
         print("by sangchoo1201")
         print(">>> 쿠쿠루삥뽕")
         self.lines.append("쿠쿠루삥뽕")
