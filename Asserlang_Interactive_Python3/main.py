@@ -1,7 +1,8 @@
 import os
 import sys
 
-def end(word, yes="은", no="는"):
+
+def end_letter(word, yes="은", no="는"):
     if ord("ㄱ") <= ord(word[-1]) <= ord("ㅎ"):
         return yes
     if ord("ㅏ") <= ord(word[-1]) <= ord("ㅣ"):
@@ -11,6 +12,7 @@ def end(word, yes="은", no="는"):
     else:
         return no
 
+
 class func:
     def __init__(self, name, start, param):
         self.name = name
@@ -18,6 +20,7 @@ class func:
         self.cnt = start
         self.var = param
         self.var_uni = {}
+
 
 class asserlang:
     def __init__(self):
@@ -68,32 +71,32 @@ class asserlang:
             result_last = self.return_value
             self.return_value = False
             value = value.split("안궁")[0]
-        result = 0
         var = self.funcs[-1].var
         var.update({"ㅋ": 1, "ㅎ": -1})
         uni = self.funcs[-1].var_uni
         names = list(sorted(list(var.keys()) + list(uni.keys()), key=lambda x: len(x), reverse=True))
-
+        result = []
         digits = value.split("ㅌ")
         return_uni = False
-        for i in digits:
-            result *= 10
+        for index, i in enumerate(digits):
+            result.append(0)
             while i:
                 for j in names:
                     if i.startswith(j):
-                        result += var[j] if j in var else uni[j]
+                        result[index] += var[j] if j in var else uni[j]
                         if j in uni:
                             return_uni = True
                         break
                 else:
                     if i.startswith("ㅇㅉ"):
-                        result += int(input("입력: "))
+                        result[index] += int(input("입력: "))
                         j = "ㅇㅉ"
                     else:
                         self.error("어쩔변수: 해당하는 변수가 없음")
                         return None
                 i = i[len(j):]
-        result += result_last
+        result[-1] += result_last
+        result = eval('*'.join(str(n) for n in result))
         return chr(result) if return_uni else result
 
     def condition(self, line):
@@ -144,16 +147,16 @@ class asserlang:
         line = line.split("~")
         include = self.check_name(line[0])
         if include:
-            self.error(f"안물안궁: 함수 \"{line[0]}\"{end(line[0])} 키워드 \"{include}\"{end(include, '을', '를')} 포함함")
+            self.error(f"안물안궁: 함수 \"{line[0]}\"{end_letter(line[0])} 키워드 \"{include}\"{end_letter(include, '을', '를')} 포함함")
             return
         names = []
         for name in line[1:]:
             include = self.check_name(name)
             if include:
-                self.error(f"안물안궁: 매개변수 \"{name}\"{end(name)} 키워드 \"{include}\"{end(include, '을', '를')} 포함함")
+                self.error(f"안물안궁: 매개변수 \"{name}\"{end_letter(name)} 키워드 \"{include}\"{end_letter(include, '을', '를')} 포함함")
                 return
             if name in names:
-                self.error(f"안물안궁: 매개변수 \"{name}\"{end(name)} 다른 매개변수와 겹침")
+                self.error(f"안물안궁: 매개변수 \"{name}\"{end_letter(name)} 다른 매개변수와 겹침")
                 return
             names.append(name)
         self.call[line[0]] = (self.funcs[-1].cnt, names)
@@ -165,19 +168,19 @@ class asserlang:
             return None
         line = line.split("~")
         if line[0] not in self.call:
-            self.error(f"안물안궁: \"{line[0]}\"{end(line[0])} 없는 함수임")
+            self.error(f"안물안궁: \"{line[0]}\"{end_letter(line[0])} 없는 함수임")
             return None
         name, line = line[0], line[1:]
         call = self.call[name]
         start = call[0]
         param = call[1]
+        if "안궁" in "".join(line):
+            self.error("안물안궁: 한 줄에서 2번 이상 함수를 호출함")
+            return None
         if len(param) != len(line):
             self.error(f"안물안궁: {len(param)}개의 인자가 필요한데, {len(line)}개가 주어짐")
             return None
         for i, value in enumerate(line):
-            if "안궁" in value:
-                self.error("안물안궁: 한 줄에서 2번 이상 함수를 호출함")
-                return None
             value = self.calc(value)
             if value is None:
                 return None
@@ -196,13 +199,13 @@ class asserlang:
             name, value = line[0], line[1]
         include = self.check_name(name)
         if include:
-            self.error(f"어쩔변수: \"{name}\"{end(name)} 키워드 \"{include}\"{end(include, '을', '를')} 포함함")
+            self.error(f"어쩔변수: \"{name}\"{end_letter(name)} 키워드 \"{include}\"{end_letter(include, '을', '를')} 포함함")
             return
         if not name:
             self.error("어쩔변수: 변수 이름이 필요함")
             return
         if name in self.funcs[-1].var or name in self.funcs[-1].var_uni:
-            self.error(f"어쩔변수: \"{name}\"{end(name)} 이미 선언됨")
+            self.error(f"어쩔변수: \"{name}\"{end_letter(name)} 이미 선언됨")
             return
         value = self.calc(value)
         if value is None:
@@ -219,10 +222,10 @@ class asserlang:
         else:
             name, value = line[0], line[1]
         if name not in self.funcs[-1].var:
-            self.error(f"어쩔변수: \"{name}\"{end(name)} 선언되지 않음")
+            self.error(f"어쩔변수: \"{name}\"{end_letter(name)} 선언되지 않음")
             return
         if name in self.funcs[-1].var_uni:
-            self.error(f"어쩔변수: \"{name}\"{end(name)} 유니코드 변수임")
+            self.error(f"어쩔변수: \"{name}\"{end_letter(name)} 유니코드 변수임")
             return
         value = self.calc(value)
         if value is None:
@@ -240,13 +243,13 @@ class asserlang:
             name, value = line[0], line[1]
         include = self.check_name(name)
         if include:
-            self.error(f"어쩔변수: \"{name}\"{end(name)} 키워드 \"{include}\"{end(include, '을', '를')} 포함함")
+            self.error(f"어쩔변수: \"{name}\"{end_letter(name)} 키워드 \"{include}\"{end_letter(include, '을', '를')} 포함함")
             return
         if not name:
             self.error("어쩔변수: 변수 이름이 필요함")
             return
         if name in self.funcs[-1].var or name in self.funcs[-1].var_uni:
-            self.error(f"어쩔변수: \"{name}\"{end(name)} 이미 선언됨")
+            self.error(f"어쩔변수: \"{name}\"{end_letter(name)} 이미 선언됨")
             return
         value = self.calc(value)
         if value is None:
@@ -263,10 +266,10 @@ class asserlang:
         else:
             name, value = line[0], line[1]
         if name not in self.funcs[-1].var_uni:
-            self.error(f"어쩔변수: \"{name}\"{end(name)} 선언되지 않음")
+            self.error(f"어쩔변수: \"{name}\"{end_letter(name)} 선언되지 않음")
             return
         if name in self.funcs[-1].var:
-            self.error(f"어쩔변수: \"{name}\"{end(name)} 정수형 변수임")
+            self.error(f"어쩔변수: \"{name}\"{end_letter(name)} 정수형 변수임")
             return
         value = self.calc(value)
         if value is None:
@@ -299,7 +302,7 @@ class asserlang:
                 return
 
     def execute(self):
-        print("asserlang-python interpreter v1.3")
+        print("asserlang-python interpreter v1.4")
         print("by sangchoo1201")
         print(">>> 쿠쿠루삥뽕")
         self.lines.append("쿠쿠루삥뽕")
@@ -317,18 +320,14 @@ class asserlang:
             self.funcs[-1].cnt += 1
             self.stop = False
 
-    def execute_file(self, path):
-        if not os.path.exists(path):
-            print(f"어쩔파일: \"{path}\"에는 파일이 없음")
-        with open(path, "r", encoding="utf8") as f:
-            lines = f.read().strip().split("\n")
-            if lines[0] not in ("쿠쿠루삥뽕", "ㅋㅋ루삥뽕"):
-                print("아무것도 모르죠?: 어쩔랭은 \"쿠쿠루삥뽕\"으로 시작해야 함")
-                return
-            if lines[-1] != "슉슈슉슉":
-                print("아무것도 모르죠?: 어쩔랭은 \"슉슈슉슉\"으로 끝나야 함")
-                return
-            self.lines = lines[:-1]
+    def execute_all(self, lines):
+        if lines[0] not in ("쿠쿠루삥뽕", "ㅋㅋ루삥뽕"):
+            print("아무것도 모르죠?: 어쩔랭은 \"쿠쿠루삥뽕\"으로 시작해야 함")
+            return
+        if lines[-1] != "슉슈슉슉":
+            print("아무것도 모르죠?: 어쩔랭은 \"슉슈슉슉\"으로 끝나야 함")
+            return
+        self.lines = lines[:-1]
         self.funcs[-1].cnt = 2
         while True:
             if not self.writing_func or self.lines[self.funcs[-1].cnt-1].startswith("안물"):
@@ -338,6 +337,14 @@ class asserlang:
             self.funcs[-1].cnt += 1
             if self.funcs[-1].cnt > len(self.lines):
                 return
+
+    def execute_file(self, path):
+        if not os.path.exists(path):
+            print(f"어쩔파일: \"{path}\"에는 파일이 없음")
+            return
+        with open(path, "r", encoding="utf8") as f:
+            lines = f.read().strip().split("\n")
+        self.execute_all(lines)
 
 
 if __name__ == "__main__":
