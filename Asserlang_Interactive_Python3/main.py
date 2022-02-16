@@ -1,6 +1,7 @@
 import os
 import sys
 
+
 def end_letter(word, yes="은", no="는"):
     if ord("ㄱ") <= ord(word[-1]) <= ord("ㅎ"):
         return yes
@@ -11,6 +12,7 @@ def end_letter(word, yes="은", no="는"):
     else:
         return no
 
+
 class func:
     def __init__(self, name, start, param):
         self.name = name
@@ -18,6 +20,7 @@ class func:
         self.cnt = start
         self.var = param
         self.var_uni = {}
+
 
 class asserlang:
     def __init__(self):
