@@ -1,3 +1,6 @@
+import os
+import sys
+
 def end(word, yes="은", no="는"):
     if ord("ㄱ") <= ord(word[-1]) <= ord("ㅎ"):
         return yes
@@ -296,7 +299,7 @@ class asserlang:
                 return
 
     def execute(self):
-        print("asserlang-python interpreter v1.0")
+        print("asserlang-python interpreter v1.3")
         print("by sangchoo1201")
         print(">>> 쿠쿠루삥뽕")
         self.lines.append("쿠쿠루삥뽕")
@@ -314,7 +317,33 @@ class asserlang:
             self.funcs[-1].cnt += 1
             self.stop = False
 
+    def execute_file(self, path):
+        if not os.path.exists(path):
+            print(f"어쩔파일: \"{path}\"에는 파일이 없음")
+        with open(path, "r", encoding="utf8") as f:
+            lines = f.read().strip().split("\n")
+            if lines[0] not in ("쿠쿠루삥뽕", "ㅋㅋ루삥뽕"):
+                print("아무것도 모르죠?: 어쩔랭은 \"쿠쿠루삥뽕\"으로 시작해야 함")
+                return
+            if lines[-1] != "슉슈슉슉":
+                print("아무것도 모르죠?: 어쩔랭은 \"슉슈슉슉\"으로 끝나야 함")
+                return
+            self.lines = lines[:-1]
+        self.funcs[-1].cnt = 2
+        while True:
+            if not self.writing_func or self.lines[self.funcs[-1].cnt-1].startswith("안물"):
+                self.execute_line(self.lines[self.funcs[-1].cnt-1])
+            if self.stop:
+                return
+            self.funcs[-1].cnt += 1
+            if self.funcs[-1].cnt > len(self.lines):
+                return
+
 
 if __name__ == "__main__":
     compiler = asserlang()
-    compiler.execute()
+    arg = sys.argv
+    if len(arg) > 1:
+        compiler.execute_file(arg[1])
+    else:
+        compiler.execute()
