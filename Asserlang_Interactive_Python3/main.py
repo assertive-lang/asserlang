@@ -24,6 +24,7 @@ class func:
 
 class asserlang:
     def __init__(self):
+        self.version = "v1.5"
         self.keywords = ("ㅋ", "ㅎ", "ㅌ",
                          "어쩔", "저쩔", "우짤래미", "저짤래미",
                          "ㅇㅉ", "ㅌㅂ", "안물", "안궁",
@@ -31,7 +32,7 @@ class asserlang:
         self.exec = (None, None, None,
                      self.make_var, self.assign_var, self.make_var_uni, self.assign_var_uni,
                      self.print, None, self.make_func, self.call_func,
-                     self.retn, self.condition, None)
+                     self.retn, self.condition, None, self.jump)
         self.call = {}
         self.funcs = [func("__main__", 1, {})]
         self.lines = []
@@ -99,6 +100,30 @@ class asserlang:
         result = eval('*'.join(str(n) for n in result))
         return chr(result) if return_uni else result
 
+    def jump(self, line):
+        value = self.calc(line)
+        if value is None:
+            return
+        if type(value) is str:
+            value = ord(value)
+        if value == self.funcs[-1].cnt:
+            self.error("어쩔;;;;: 자신이 위치한 줄로는 점프할 수 없음")
+            return
+        if self.funcs[-1].name == "__main__":
+            if value > len(self.lines)+1:
+                self.error("어쩔;;;;: 아직 작성되지 않은 부분으로 점프할 수 없음")
+                return
+            for i, j in self.call.items():
+                if j[0] <= value <= j[2]:
+                    self.error(f"어쩔;;;;: 함수 밖에서 함수 \"{i}\"{end_letter(i, '으로', '로')} 점프할 수 없음")
+                    return
+        else:
+            j = self.call[self.funcs[-1].name]
+            if value <= j[0] or j[1] <= value:
+                self.error(f"어쩔;;;;: 함수 \"{self.funcs[-1].name}\" 안에서 함수 밖으로 점프할 수 없음")
+                return
+        self.funcs[-1].cnt = value-1
+
     def condition(self, line):
         cnt = line.count("킹받쥬?")
         if cnt == 0:
@@ -111,6 +136,8 @@ class asserlang:
         value = self.calc(condition)
         if value is None:
             return
+        if type(value) is str:
+            value = ord(value)
         if value == 0:
             self.execute_line(line)
 
@@ -137,6 +164,7 @@ class asserlang:
             self.retn("")
             return
         if line == "":
+            self.call[self.writing_func].append(self.funcs[-1].cnt)
             self.writing_func = False
             return
         if self.writing_func:
@@ -159,7 +187,7 @@ class asserlang:
                 self.error(f"안물안궁: 매개변수 \"{name}\"{end_letter(name)} 다른 매개변수와 겹침")
                 return
             names.append(name)
-        self.call[line[0]] = (self.funcs[-1].cnt, names)
+        self.call[line[0]] = [self.funcs[-1].cnt, names]
         self.writing_func = line[0]
 
     def call_func(self, line):
@@ -282,7 +310,7 @@ class asserlang:
         value = self.calc(line)
         if value is None:
             return
-        print(value)
+        print(value, end=("" if type(value) is str and self.file else "\n"))
 
     def execute_line(self, line: str):
         if line.strip() == "":
@@ -302,7 +330,7 @@ class asserlang:
                 return
 
     def execute(self):
-        print("asserlang-python interpreter v1.4")
+        print(f"asserlang-python interpreter {self.version}")
         print("by sangchoo1201")
         print(">>> 쿠쿠루삥뽕")
         self.lines.append("쿠쿠루삥뽕")
@@ -320,7 +348,7 @@ class asserlang:
             self.funcs[-1].cnt += 1
             self.stop = False
 
-    def execute_all(self, lines):
+    def execute_all(self, lines, path="__default__"):
         if lines[0] not in ("쿠쿠루삥뽕", "ㅋㅋ루삥뽕"):
             print("아무것도 모르죠?: 어쩔랭은 \"쿠쿠루삥뽕\"으로 시작해야 함")
             return
@@ -329,6 +357,7 @@ class asserlang:
             return
         self.lines = lines[:-1]
         self.funcs[-1].cnt = 2
+        self.file = path
         while True:
             if not self.writing_func or self.lines[self.funcs[-1].cnt-1].startswith("안물"):
                 self.execute_line(self.lines[self.funcs[-1].cnt-1])
@@ -344,7 +373,7 @@ class asserlang:
             return
         with open(path, "r", encoding="utf8") as f:
             lines = f.read().strip().split("\n")
-        self.execute_all(lines)
+        self.execute_all(lines, path)
 
 
 if __name__ == "__main__":
