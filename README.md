@@ -266,7 +266,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <!-- markdownlint-disable -->
 <table>
   <tr>
-    <td align="center"><a href="https://github.com/c3nb"><img src="https://avatars.githubusercontent.com/u/73321185?v=4?s=100" width="100px;" alt=""/><br /><sub><b>C#Newbie</b></sub></a><br /><a href="https://github.com/assertive-lang/asserlang/commits?author=c3nb" title="Code">💻</a></td>
+    <td align="center"><a href="https://github.com/c3nb"><img src="https://avatars.githubusercontent.com/u/73321185?v=4?s=100" width="100px;" alt=""/><br /><sub><b>C#Newbie</b></sub></a><br /><a href="https://github.com/assertive-lang/asserlang/commits?author=c3nb" title="Code">💻</a> <a href="#platform-c3nb" title="Packaging/porting to new platform">📦</a></td>
   </tr>
 </table>
 
