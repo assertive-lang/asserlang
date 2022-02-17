@@ -21,7 +21,7 @@ Made with ♥️ in South Korea by [chul0721](https://github.com/chul0721) & [su
 
 ## 도움을 주신 분들 ✨
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-3-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-4-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
@@ -32,6 +32,7 @@ Made with ♥️ in South Korea by [chul0721](https://github.com/chul0721) & [su
     <td align="center"><a href="https://github.com/c3nb"><img src="https://avatars.githubusercontent.com/u/73321185?v=4?s=100" width="100px;" alt=""/><br /><sub><b>C#Newbie</b></sub></a><br /><a href="#platform-c3nb" title="Packaging/porting to new platform">📦</a></td>
     <td align="center"><a href="https://github.com/hwan809"><img src="https://avatars.githubusercontent.com/u/55339366?v=4?s=100" width="100px;" alt=""/><br /><sub><b>hwan809</b></sub></a><br /><a href="#platform-hwan809" title="Packaging/porting to new platform">📦</a></td>
     <td align="center"><a href="https://github.com/sangchoo1201"><img src="https://avatars.githubusercontent.com/u/75765800?v=4?s=100" width="100px;" alt=""/><br /><sub><b>sangchoo1201</b></sub></a><br /><a href="#platform-sangchoo1201" title="Packaging/porting to new platform">📦</a></td>
+    <td align="center"><a href="https://github.com/wjdqhry"><img src="https://avatars.githubusercontent.com/u/30039641?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Bogus Jung</b></sub></a><br /><a href="https://github.com/assertive-lang/asserlang/commits?author=wjdqhry" title="Code">💻</a></td>
   </tr>
 </table>
 
