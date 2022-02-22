@@ -11,15 +11,6 @@
       "avatar_url": "https://avatars.githubusercontent.com/u/73321185?v=4",
       "profile": "https://github.com/c3nb",
       "contributions": [
-        "code"
-      ]
-    },
-    {
-      "login": "wjdqhry",
-      "name": "정보교",
-      "avatar_url": "https://avatars.githubusercontent.com/u/30039641?v=4",
-      "profile": "https://github.com/wjdqhry",
-      "contributions": [
         "platform"
       ]
     },
@@ -40,10 +31,17 @@
       "contributions": [
         "platform"
       ]
+    },
+    {
+      "login": "wjdqhry",
+      "name": "Bogus Jung",
+      "avatar_url": "https://avatars.githubusercontent.com/u/30039641?v=4",
+      "profile": "https://github.com/wjdqhry",
+      "contributions": [
+        "code"
+      ]
     }
   ],
-  "badgeTemplate": "[![All Contributors](https://img.shields.io/badge/all_contributors-<%= contributors.length %>-orange.svg?style=flat-square)](#contributors)",
-  "contributorTemplate": "<a href=\"<%= contributor.profile %>\"><img src=\"<%= contributor.avatar_url %>\" width=\"<%= options.imageSize %>px;\" alt=\"\"/><br /><sub><b><%= contributor.name %></b></sub></a>",
   "contributorsPerLine": 7,
   "projectName": "asserlang",
   "projectOwner": "assertive-lang",

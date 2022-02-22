@@ -20,19 +20,19 @@ Made with ♥️ in South Korea by [chul0721](https://github.com/chul0721) & [su
 > 이 문서는 표준 구현체인 Node.js 구현체 기준으로 작성되었습니다.
 
 ## 도움을 주신 분들 ✨
-
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-4-orange.svg?style=flat-square)](#contributors)
+[![All Contributors](https://img.shields.io/badge/all_contributors-4-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
+
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
 <table>
   <tr>
-    <td align="center"><a href="https://github.com/c3nb"><img src="https://avatars.githubusercontent.com/u/73321185?v=4" width="100px;" alt=""/><br /><sub><b>C#Newbie</b></sub></a></td>
-    <td align="center"><a href="https://github.com/wjdqhry"><img src="https://avatars.githubusercontent.com/u/30039641?v=4" width="100px;" alt=""/><br /><sub><b>정보교</b></sub></a></td>
-    <td align="center"><a href="https://github.com/hwan809"><img src="https://avatars.githubusercontent.com/u/55339366?v=4" width="100px;" alt=""/><br /><sub><b>hwan809</b></sub></a></td>
-    <td align="center"><a href="https://github.com/sangchoo1201"><img src="https://avatars.githubusercontent.com/u/75765800?v=4" width="100px;" alt=""/><br /><sub><b>sangchoo1201</b></sub></a></td>
+    <td align="center"><a href="https://github.com/c3nb"><img src="https://avatars.githubusercontent.com/u/73321185?v=4?s=100" width="100px;" alt=""/><br /><sub><b>C#Newbie</b></sub></a><br /><a href="#platform-c3nb" title="Packaging/porting to new platform">📦</a></td>
+    <td align="center"><a href="https://github.com/hwan809"><img src="https://avatars.githubusercontent.com/u/55339366?v=4?s=100" width="100px;" alt=""/><br /><sub><b>hwan809</b></sub></a><br /><a href="#platform-hwan809" title="Packaging/porting to new platform">📦</a></td>
+    <td align="center"><a href="https://github.com/sangchoo1201"><img src="https://avatars.githubusercontent.com/u/75765800?v=4?s=100" width="100px;" alt=""/><br /><sub><b>sangchoo1201</b></sub></a><br /><a href="#platform-sangchoo1201" title="Packaging/porting to new platform">📦</a></td>
+    <td align="center"><a href="https://github.com/wjdqhry"><img src="https://avatars.githubusercontent.com/u/30039641?v=4?s=100" width="100px;" alt=""/><br /><sub><b>Bogus Jung</b></sub></a><br /><a href="https://github.com/assertive-lang/asserlang/commits?author=wjdqhry" title="Code">💻</a></td>
   </tr>
 </table>
 
@@ -43,7 +43,7 @@ Made with ♥️ in South Korea by [chul0721](https://github.com/chul0721) & [su
 
 # 문법 [v1]
 
-무조건 코드의 시작과 끝에는 각각 '쿠쿠루삥뽕'와 '슉슈슉슉'가 포함되어야 합니다.  
+코드의 시작과 끝에는 항상 각각 '쿠쿠루삥뽕'과 '슉슈슉슉'가 포함되어야 합니다.  
 키워드는 변수의 이름이 될 수 없습니다.  
 파일 확장자는 .astv를 사용합니다.  
 띄어쓰기 대신 `~`를 사용합니다.  
@@ -52,9 +52,9 @@ Made with ♥️ in South Korea by [chul0721](https://github.com/chul0721) & [su
 ## 연산자
 
 ```
-ㅋ: +1를 의미합니다.
-ㅎ: -1를 의미합니다.
-ㅌ: 곱하기를 의미합니다.
+ㅋ: + 1
+ㅎ: - 1
+ㅌ: 곱셈 연산자
 ```
 
 > 예) ㅋㅋㅋㅋㅋㅌㅋㅋㅌㅋㅋㅋㅋ = 5 x 2 x 4 = 40
