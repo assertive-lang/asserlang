@@ -1,8 +1,9 @@
 import os
 import sys
+from typing import Dict, Optional, Union, List
 
 
-def end_letter(word, yes="은", no="는"):
+def end_letter(word: str, yes: Optional[str] = "은", no: Optional[str] = "는") -> str:
     if ord("ㄱ") <= ord(word[-1]) <= ord("ㅎ"):
         return yes
     if ord("ㅏ") <= ord(word[-1]) <= ord("ㅣ"):
@@ -14,7 +15,7 @@ def end_letter(word, yes="은", no="는"):
 
 
 class func:
-    def __init__(self, name, start, param):
+    def __init__(self, name: str, start: int, param: Dict[str, int]):
         self.name = name
         self.start = start
         self.cnt = start
@@ -23,7 +24,7 @@ class func:
 
 
 class asserlang:
-    def __init__(self):
+    def __init__(self) -> None:
         self.version = "v1.5"
         self.keywords = ("ㅋ", "ㅎ", "ㅌ",
                          "어쩔", "저쩔", "우짤래미", "저짤래미",
@@ -41,7 +42,7 @@ class asserlang:
         self.file = ""
         self.return_value = False
 
-    def error(self, state):
+    def error(self, state: str) -> None:
         print("Traceback (most recent call last):")
         for i in self.funcs:
             print("    ", end="")
@@ -52,8 +53,8 @@ class asserlang:
         print(state)
         self.stop = True
 
-    def calc(self, value):
-        if value == 0:
+    def calc(self, value: str) -> Union[None, int, str]:
+        if value == "":
             return 0
         value = value.replace("ㅌㅂ", "ㅇㅉ")
         func_count = value.count("안궁")
@@ -100,7 +101,7 @@ class asserlang:
         result = eval('*'.join(str(n) for n in result))
         return chr(result) if return_uni else result
 
-    def jump(self, line):
+    def jump(self, line: str) -> None:
         value = self.calc(line)
         if value is None:
             return
@@ -124,7 +125,7 @@ class asserlang:
                 return
         self.funcs[-1].cnt = value-1
 
-    def condition(self, line):
+    def condition(self, line: str) -> None:
         cnt = line.count("킹받쥬?")
         if cnt == 0:
             self.error("어쩔조건: 킹받쥬?가 없음")
@@ -141,13 +142,13 @@ class asserlang:
         if value == 0:
             self.execute_line(line)
 
-    def check_name(self, name):
+    def check_name(self, name: str) -> Union[False, str]:
         for i in self.keywords:
             if i in name:
                 return i
         return False
 
-    def retn(self, line):
+    def retn(self, line: Union[None, str]) -> None:
         if line:
             self.return_value = self.calc(line)
         elif line == "":
@@ -156,7 +157,7 @@ class asserlang:
             self.return_value = None
         self.funcs.pop()
 
-    def make_func(self, line):
+    def make_func(self, line: str) -> None:
         if line.strip("~") == "" and not self.writing_func:
             if len(self.funcs) == 1:
                 self.error("안물안궁: 함수 이름이 필요함")
@@ -190,7 +191,7 @@ class asserlang:
         self.call[line[0]] = [self.funcs[-1].cnt, names]
         self.writing_func = line[0]
 
-    def call_func(self, line):
+    def call_func(self, line: str) -> None:
         if line.strip("~") == "":
             self.error("안물안궁: 함수 이름이 필요함")
             return None
@@ -201,28 +202,29 @@ class asserlang:
         name, line = line[0], line[1:]
         call = self.call[name]
         start = call[0]
-        param = call[1]
+        param: List[str] = call[1]
         if "안궁" in "".join(line):
             self.error("안물안궁: 한 줄에서 2번 이상 함수를 호출함")
             return None
         if len(param) != len(line):
             self.error(f"안물안궁: {len(param)}개의 인자가 필요한데, {len(line)}개가 주어짐")
             return None
-        for i, value in enumerate(line):
+        new_line: List[int] = []
+        for value in line:
             value = self.calc(value)
             if value is None:
                 return None
             if type(value) == str:
                 value = ord(value)
-            line[i] = value
-        dic = dict(zip(param, line))
+            new_line.append(value)
+        dic: Dict[str, int] = dict(zip(param, new_line))
         self.funcs.append(func(name, start, dic))
 
-    def make_var(self, line):
+    def make_var(self, line: str) -> None:
         line = line.split("~", 1)
         if len(line) == 1:
             name = line[0]
-            value = 0
+            value = ""
         else:
             name, value = line[0], line[1]
         include = self.check_name(name)
@@ -242,11 +244,11 @@ class asserlang:
             value = ord(value)
         self.funcs[-1].var[name] = value
 
-    def assign_var(self, line):
+    def assign_var(self, line: str) -> None:
         line = line.split("~", 1)
         if len(line) == 1:
             name = line[0]
-            value = 0
+            value = ""
         else:
             name, value = line[0], line[1]
         if name not in self.funcs[-1].var:
@@ -262,11 +264,11 @@ class asserlang:
             value = ord(value)
         self.funcs[-1].var[name] = value
 
-    def make_var_uni(self, line):
+    def make_var_uni(self, line: str) -> None:
         line = line.split("~", 1)
         if len(line) == 1:
             name = line[0]
-            value = 0
+            value = ""
         else:
             name, value = line[0], line[1]
         include = self.check_name(name)
@@ -286,11 +288,11 @@ class asserlang:
             value = ord(value)
         self.funcs[-1].var_uni[name] = value
 
-    def assign_var_uni(self, line):
+    def assign_var_uni(self, line: str) -> None:
         line = line.split("~", 1)
         if len(line) == 1:
             name = line[0]
-            value = 0
+            value = ""
         else:
             name, value = line[0], line[1]
         if name not in self.funcs[-1].var_uni:
@@ -306,13 +308,13 @@ class asserlang:
             value = ord(value)
         self.funcs[-1].var_uni[name] = value
 
-    def print(self, line):
+    def print(self, line: str) -> None:
         value = self.calc(line)
         if value is None:
             return
         print(value, end=("" if type(value) is str and self.file else "\n"))
 
-    def execute_line(self, line: str):
+    def execute_line(self, line: str) -> None:
         if line.strip() == "":
             return
         if not line.startswith(self.keywords):
@@ -329,7 +331,7 @@ class asserlang:
                 do(line)
                 return
 
-    def execute(self):
+    def execute(self) -> None:
         print(f"asserlang-python interpreter {self.version}")
         print("by sangchoo1201")
         print(">>> 쿠쿠루삥뽕")
@@ -348,7 +350,7 @@ class asserlang:
             self.funcs[-1].cnt += 1
             self.stop = False
 
-    def execute_all(self, lines, path="__default__"):
+    def execute_all(self, lines: List[str], path: Optional[str] = "__default__") -> None:
         if lines[0] not in ("쿠쿠루삥뽕", "ㅋㅋ루삥뽕"):
             print("아무것도 모르죠?: 어쩔랭은 \"쿠쿠루삥뽕\"으로 시작해야 함")
             return
@@ -367,7 +369,7 @@ class asserlang:
             if self.funcs[-1].cnt > len(self.lines):
                 return
 
-    def execute_file(self, path):
+    def execute_file(self, path: str) -> None:
         if not os.path.exists(path):
             print(f"어쩔파일: \"{path}\"에는 파일이 없음")
             return
