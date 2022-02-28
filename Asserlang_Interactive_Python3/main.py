@@ -4,11 +4,16 @@ from typing import Dict, Optional, Union, List
 
 
 def end_letter(word: str, yes: Optional[str] = "은", no: Optional[str] = "는") -> str:
-    if ord("ㄱ") <= ord(word[-1]) <= ord("ㅎ"):
+    last_word = word[-1]
+    if ord("ㄱ") <= ord(last_word) <= ord("ㅎ"):
         return yes
-    if ord("ㅏ") <= ord(word[-1]) <= ord("ㅣ"):
+    if ord("ㅏ") <= ord(last_word) <= ord("ㅣ"):
         return no
-    if (ord(word[-1]) - ord("가")) % 28:
+    if last_word.lower() in "aeiouwy":
+        return no
+    elif last_word.isalpha():
+        return yes
+    if (ord(last_word) - ord("가")) % 28:
         return yes
     else:
         return no
@@ -142,11 +147,11 @@ class asserlang:
         if value == 0:
             self.execute_line(line)
 
-    def check_name(self, name: str) -> Union[False, str]:
+    def check_name(self, name: str) -> str:
         for i in self.keywords:
             if i in name:
                 return i
-        return False
+        return ""
 
     def retn(self, line: Union[None, str]) -> None:
         if line:
