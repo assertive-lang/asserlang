@@ -1,6 +1,7 @@
 import os
 import sys
 from typing import Dict, Optional, Union, List
+from xml.dom import ValidationErr
 
 
 def end_letter(word: str, yes: Optional[str] = "은", no: Optional[str] = "는") -> str:
@@ -92,7 +93,12 @@ class asserlang:
                         break
                 else:
                     if i.startswith("ㅇㅉ"):
-                        result[index] += int(input("입력: "))
+                        try:
+                            _input = int(input("입력: "))
+                            result[index] += _input
+                        except ValueError:
+                            self.error("어쩔변수: 문자열은 입력받을 수 없음.")
+                            return(None)
                         j = "ㅇㅉ"
                     else:
                         self.error("어쩔변수: 해당하는 변수가 없음")
