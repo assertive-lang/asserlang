@@ -259,7 +259,7 @@ Made with ♥️ in South Korea by [sangchoo1201](https://github.com/sangchoo120
 슉슈슉슉
 ```
 
-> 결과: 22
+> 결과: 4
 >
 > 무지개반사{반환할 값}
 > 
