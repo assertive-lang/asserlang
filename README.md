@@ -1,7 +1,7 @@
 # Asserlang 어쩔랭
 
 Made with ♥️ in South Korea by [chul0721](https://github.com/chul0721) & [sujang958](https://github.com/sujang958)
- 
+
 [디스코드 서버에 참가하여 어쩔랭에 대하여 의견을 남겨주세요!](https://discord.gg/nZEEhDKnvb)  
 | 종류 | 경로 | 제작자 | 상태 |
 |------|------|------|------|
@@ -10,7 +10,7 @@ Made with ♥️ in South Korea by [chul0721](https://github.com/chul0721) & [su
 | Python 구현체 | [/Asserlang_Python](https://github.com/assertive-lang/asserlang/tree/main/Asserlang_Python) | hwan809 | on process |
 | Go 구현체 | [/Asserlang_Go](https://github.com/assertive-lang/asserlang/tree/main/Asserlang_Go) | | on process |
 | AsserFuck Rust 구현체 | [/extras/AsserFuck_Rust](https://github.com/assertive-lang/asserlang/tree/main/extras/AsserFuck_Rust) | sujang958 | v1 |
-| Python3 인터랙티브 구현체 | [/Asserlang_Interactive_Python3](https://github.com/assertive-lang/asserlang/tree/main/Asserlang_Interactive_Python3) | sangchoo1201 | v1.5 |
+| Python3 인터랙티브 구현체 | [/Asserlang_Interactive_Python3](https://github.com/assertive-lang/asserlang/tree/main/Asserlang_Interactive_Python3) | sangchoo1201 | v1.5.1 |
 
 유행어를 본따 만든 [엄랭](https://github.com/rycont/umjunsik-lang), [몰랭](https://github.com/ArpaAP/mollang), 그리고 [슈숙 언어](https://github.com/yf-dev/syusuk)와 같은 언어들에 영감을 받아 만들게 되었습니다.
 
@@ -20,8 +20,11 @@ Made with ♥️ in South Korea by [chul0721](https://github.com/chul0721) & [su
 > 이 문서는 표준 구현체인 Node.js 구현체 기준으로 작성되었습니다.
 
 ## 도움을 주신 분들 ✨
+
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+
 [![All Contributors](https://img.shields.io/badge/all_contributors-5-orange.svg?style=flat-square)](#contributors-)
+
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
@@ -221,7 +224,7 @@ Made with ♥️ in South Korea by [chul0721](https://github.com/chul0721) & [su
 
 > 결과: 2 1
 >
-> 화났쥬?(조건)킹받쥬?(조건이 0일 때 실행할 코드)  
+> 화났쥬?(조건)킹받쥬?(조건이 0일 때 실행할 코드)
 
 ## 반복문의 구현
 
