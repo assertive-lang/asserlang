@@ -96,7 +96,11 @@ class asserlang:
                         break
                 else:
                     if i.startswith("ㅇㅉ"):
-                        result[index] += int(input("입력: "))
+                        in_value = input("입력: ")
+                        if not (in_value.isnumeric() or (in_value[0] == "-" and in_value[1:].isnumeric())):
+                            self.error("어쩔ㅌㅂ: 입력으로 정수가 아닌 것이 입력됨")
+                            return None
+                        result[index] += int(in_value)
                         j = "ㅇㅉ"
                     else:
                         self.error("어쩔변수: 해당하는 변수가 없음")
