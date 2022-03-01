@@ -4,11 +4,16 @@ from typing import Dict, Optional, Union, List
 
 
 def end_letter(word: str, yes: Optional[str] = "은", no: Optional[str] = "는") -> str:
-    if ord("ㄱ") <= ord(word[-1]) <= ord("ㅎ"):
+    last_word = word[-1]
+    if ord("ㄱ") <= ord(last_word) <= ord("ㅎ"):
         return yes
-    if ord("ㅏ") <= ord(word[-1]) <= ord("ㅣ"):
+    if ord("ㅏ") <= ord(last_word) <= ord("ㅣ"):
         return no
-    if (ord(word[-1]) - ord("가")) % 28:
+    if last_word.lower() in "aeiouwy":
+        return no
+    elif last_word.isalpha():
+        return yes
+    if (ord(last_word) - ord("가")) % 28:
         return yes
     else:
         return no
@@ -76,8 +81,7 @@ class asserlang:
         var = self.funcs[-1].var
         var.update({"ㅋ": 1, "ㅎ": -1})
         uni = self.funcs[-1].var_uni
-        names = list(sorted(list(var.keys()) + list(uni.keys()),
-                     key=lambda x: len(x), reverse=True))
+        names = list(sorted(list(var.keys()) + list(uni.keys()), key=lambda x: len(x), reverse=True))
         result = []
         digits = value.split("ㅌ")
         return_uni = False
@@ -92,7 +96,11 @@ class asserlang:
                         break
                 else:
                     if i.startswith("ㅇㅉ"):
-                        result[index] += int(input("입력: "))
+                        in_value = input("입력: ")
+                        if not (in_value.isnumeric() or (in_value[0] == "-" and in_value[1:].isnumeric())):
+                            self.error("어쩔ㅌㅂ: 입력으로 정수가 아닌 것이 입력됨")
+                            return None
+                        result[index] += int(in_value)
                         j = "ㅇㅉ"
                     else:
                         self.error("어쩔변수: 해당하는 변수가 없음")
@@ -117,14 +125,12 @@ class asserlang:
                 return
             for i, j in self.call.items():
                 if j[0] <= value <= j[2]:
-                    self.error(
-                        f"어쩔;;;;: 함수 밖에서 함수 \"{i}\"{end_letter(i, '으로', '로')} 점프할 수 없음")
+                    self.error(f"어쩔;;;;: 함수 밖에서 함수 \"{i}\"{end_letter(i, '으로', '로')} 점프할 수 없음")
                     return
         else:
             j = self.call[self.funcs[-1].name]
             if value <= j[0] or j[1] <= value:
-                self.error(
-                    f"어쩔;;;;: 함수 \"{self.funcs[-1].name}\" 안에서 함수 밖으로 점프할 수 없음")
+                self.error(f"어쩔;;;;: 함수 \"{self.funcs[-1].name}\" 안에서 함수 밖으로 점프할 수 없음")
                 return
         self.funcs[-1].cnt = value-1
 
@@ -145,11 +151,11 @@ class asserlang:
         if value == 0:
             self.execute_line(line)
 
-    def check_name(self, name: str) -> Union[bool, str]:
+    def check_name(self, name: str) -> str:
         for i in self.keywords:
             if i in name:
                 return i
-        return False
+        return ""
 
     def retn(self, line: Union[None, str]) -> None:
         if line:
@@ -179,19 +185,16 @@ class asserlang:
         line = line.split("~")
         include = self.check_name(line[0])
         if include:
-            self.error(
-                f"안물안궁: 함수 \"{line[0]}\"{end_letter(line[0])} 키워드 \"{include}\"{end_letter(include, '을', '를')} 포함함")
+            self.error(f"안물안궁: 함수 \"{line[0]}\"{end_letter(line[0])} 키워드 \"{include}\"{end_letter(include, '을', '를')} 포함함")
             return
         names = []
         for name in line[1:]:
             include = self.check_name(name)
             if include:
-                self.error(
-                    f"안물안궁: 매개변수 \"{name}\"{end_letter(name)} 키워드 \"{include}\"{end_letter(include, '을', '를')} 포함함")
+                self.error(f"안물안궁: 매개변수 \"{name}\"{end_letter(name)} 키워드 \"{include}\"{end_letter(include, '을', '를')} 포함함")
                 return
             if name in names:
-                self.error(
-                    f"안물안궁: 매개변수 \"{name}\"{end_letter(name)} 다른 매개변수와 겹침")
+                self.error(f"안물안궁: 매개변수 \"{name}\"{end_letter(name)} 다른 매개변수와 겹침")
                 return
             names.append(name)
         self.call[line[0]] = [self.funcs[-1].cnt, names]
@@ -235,8 +238,7 @@ class asserlang:
             name, value = line[0], line[1]
         include = self.check_name(name)
         if include:
-            self.error(
-                f"어쩔변수: \"{name}\"{end_letter(name)} 키워드 \"{include}\"{end_letter(include, '을', '를')} 포함함")
+            self.error(f"어쩔변수: \"{name}\"{end_letter(name)} 키워드 \"{include}\"{end_letter(include, '을', '를')} 포함함")
             return
         if not name:
             self.error("어쩔변수: 변수 이름이 필요함")
@@ -280,8 +282,7 @@ class asserlang:
             name, value = line[0], line[1]
         include = self.check_name(name)
         if include:
-            self.error(
-                f"어쩔변수: \"{name}\"{end_letter(name)} 키워드 \"{include}\"{end_letter(include, '을', '를')} 포함함")
+            self.error(f"어쩔변수: \"{name}\"{end_letter(name)} 키워드 \"{include}\"{end_letter(include, '을', '를')} 포함함")
             return
         if not name:
             self.error("어쩔변수: 변수 이름이 필요함")
