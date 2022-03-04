@@ -206,7 +206,7 @@ Made with ♥️ in South Korea by [chul0721](https://github.com/chul0721) & [su
 슉슈슉슉
 ```
 
-> 결과: 22
+> 결과: 4
 >
 > 무지개반사{반환할 값}
 
