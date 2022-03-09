@@ -250,8 +250,9 @@ Made with ♥️ in South Korea by [chul0721](https://github.com/chul0721) & [su
 
 ```
 $ git clone http://github.com/assertive-lang/asserlang
-$ cd asserlang
+$ cd asserlang/Asserlang_nodeJS
 $ npm i
+$ sudo npm i -g typescript
 $ tsc
 $ node dist/index.js 파일명
 ```
