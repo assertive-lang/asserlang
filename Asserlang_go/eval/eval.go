@@ -37,9 +37,14 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 	case *ast.Identifier:
 		if val, ok := env.Get(node.Value); ok {
 			return val
-		} else {
-			return newError("어쩔변수")
 		}
+
+		if builtinFn, ok := builtinFunctions[node.Value]; ok {
+			return builtinFn
+		}
+
+		return newError("어쩔변수")
+
 	}
 	return nil
 }
@@ -54,4 +59,8 @@ func evalStatements(stmts []ast.Statement, env *object.Environment) object.Objec
 
 func newError(format string, a ...interface{}) *object.Error {
 	return &object.Error{Message: fmt.Sprintf(format, a...)}
+}
+
+var builtinFunctions = map[string]*object.Builtin{
+	"print": object.GetBuiltinByName("print"),
 }

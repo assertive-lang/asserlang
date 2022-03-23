@@ -5,7 +5,9 @@ import (
 	"fmt"
 	"io/ioutil"
 
+	"github.com/assertive-lang/asserlang/Asserlang_go/eval"
 	"github.com/assertive-lang/asserlang/Asserlang_go/lexer"
+	"github.com/assertive-lang/asserlang/Asserlang_go/object"
 	"github.com/assertive-lang/asserlang/Asserlang_go/repl"
 
 	"github.com/assertive-lang/asserlang/Asserlang_go/parser"
@@ -28,21 +30,26 @@ func main() {
 
 		l := lexer.New(string(raw), false)
 		p := parser.New(l)
+
 		program := p.ParseProgram()
 
 		if program == nil {
 			panic(fmt.Errorf("ParseProgram() returned nil"))
 		}
+
 		errors := p.Errors()
+
 		if len(errors) > 0 {
 			for _, msg := range errors {
 				fmt.Printf("%s\n", msg)
 			}
+
 		} else {
-			for i, s := range program.Statements {
-				fmt.Printf("%d | %s\n", i+1, s)
-			}
+			env := object.NewEnvironment()
+			result := eval.Eval(program, env)
+			println(result.Inspect())
 		}
+
 	} else {
 		repl.Start()
 	}

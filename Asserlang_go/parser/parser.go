@@ -2,6 +2,7 @@ package parser
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/assertive-lang/asserlang/Asserlang_go/ast"
 	"github.com/assertive-lang/asserlang/Asserlang_go/lexer"
@@ -39,6 +40,7 @@ func New(l *lexer.Lexer) *Parser {
 	p.registerPrefix(token.KI, p.parseIntegerLiteral)
 	p.registerPrefix(token.HU, p.parseIntegerLiteral)
 	p.registerPrefix(token.IDENT, p.parseIdentitifier)
+	p.registerPrefix(token.EOF, func() ast.Expression { os.Exit(0); return nil })
 
 	p.registerInfix(token.KI, p.parseInfixIntegerExpression)
 	p.registerInfix(token.HU, p.parseInfixIntegerExpression)
@@ -85,6 +87,8 @@ func (p *Parser) parseStatement() ast.Statement {
 		return p.parseLetStatement()
 	case token.NEWLINE:
 		return nil
+	case token.BOF:
+		return nil
 	default:
 		return p.parseExprStatement()
 	}
@@ -123,6 +127,7 @@ func (p *Parser) parseExprStatement() *ast.ExpressionStatement {
 
 func (p *Parser) parseExpr() ast.Expression {
 	prefix := p.prefixParseFuncs[p.curToken.Type]
+
 	if prefix == nil {
 		p.noPrefixParseFuncError(p.curToken.Type)
 		return nil
@@ -211,6 +216,34 @@ func (p *Parser) parseTUExpression(left ast.Expression) ast.Expression {
 func (p *Parser) parseIdentitifier() ast.Expression {
 	exp := &ast.Identifier{Token: p.curToken, Value: p.curToken.Literal}
 	return exp
+}
+
+func (p *Parser) parseCallExpression(function ast.Expression) ast.Expression {
+	expr := &ast.CallExpression{
+		Token:    p.curToken,
+		Function: function,
+	}
+	expr.Arguments = p.parseExprList(token.NEWLINE)
+
+	return expr
+}
+
+// TODO: fix functions stuff
+func (p *Parser) parseExprList(end token.TokenType) []ast.Expression {
+	list := []ast.Expression{}
+
+	if p.peekTokenIs(end) {
+		p.nextToken()
+		return list
+	}
+
+	if !p.expectPeek(token.WAVE) {
+		return nil
+	}
+
+	p.nextToken()
+
+	return list
 }
 
 func (p *Parser) curTokenIs(t token.TokenType) bool {
