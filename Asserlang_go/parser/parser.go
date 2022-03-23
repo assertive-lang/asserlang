@@ -8,20 +8,44 @@ import (
 	"github.com/assertive-lang/asserlang/Asserlang_go/token"
 )
 
+type (
+	prefixParseFunc  func() ast.Expression
+	infixParseFunc   func(ast.Expression) ast.Expression
+	postfixParseFunc func() ast.Expression
+)
+
 type Parser struct {
 	l *lexer.Lexer
 
 	errors    []string
 	curToken  token.Token
 	peekToken token.Token
+
+	prefixParseFuncs map[token.TokenType]prefixParseFunc
+
+	infixParseFuncs   map[token.TokenType]infixParseFunc
+	postfixParseFuncs map[token.TokenType]postfixParseFunc
 }
 
 func New(l *lexer.Lexer) *Parser {
-	p := &Parser{l: l, errors: []string{}}
+	p := &Parser{
+		l:                 l,
+		errors:            []string{},
+		prefixParseFuncs:  make(map[token.TokenType]prefixParseFunc),
+		infixParseFuncs:   make(map[token.TokenType]infixParseFunc),
+		postfixParseFuncs: make(map[token.TokenType]postfixParseFunc),
+	}
+
+	p.registerPrefix(token.KI, p.parseIntegerLiteral)
+	p.registerPrefix(token.HU, p.parseIntegerLiteral)
+	p.registerPrefix(token.IDENT, p.parseIdentitifier)
+
+	p.registerInfix(token.KI, p.parseInfixIntegerExpression)
+	p.registerInfix(token.HU, p.parseInfixIntegerExpression)
+	p.registerInfix(token.TU, p.parseTUExpression)
 
 	p.nextToken()
 	p.nextToken()
-
 	return p
 }
 
@@ -30,7 +54,7 @@ func (p *Parser) Errors() []string {
 }
 
 func (p *Parser) peekError(t token.TokenType) {
-	msg := fmt.Sprintf("expected next token to be %s, got %s instead", t, p.peekToken.Type)
+	msg := fmt.Sprintf("line %d: expected next token to be %s, got %s instead", p.peekToken.Line, t, p.peekToken.Type)
 	p.errors = append(p.errors, msg)
 }
 
@@ -46,10 +70,11 @@ func (p *Parser) ParseProgram() *ast.Program {
 	for p.peekToken.Type != token.EOF {
 		stmt := p.parseStatement()
 
-		p.nextToken()
 		if stmt != nil {
 			program.Statements = append(program.Statements, stmt)
 		}
+
+		p.nextToken()
 	}
 	return program
 }
@@ -58,9 +83,10 @@ func (p *Parser) parseStatement() ast.Statement {
 	switch p.curToken.Type {
 	case token.LET:
 		return p.parseLetStatement()
-
-	default:
+	case token.NEWLINE:
 		return nil
+	default:
+		return p.parseExprStatement()
 	}
 }
 
@@ -77,12 +103,114 @@ func (p *Parser) parseLetStatement() *ast.LetStatement {
 		return nil
 	}
 
-	for !p.peekTokenIs(token.NEWLINE) {
+	p.nextToken()
+	stmt.Value = p.parseExpr()
+
+	return stmt
+
+}
+
+func (p *Parser) parseExprStatement() *ast.ExpressionStatement {
+	stmt := &ast.ExpressionStatement{Token: p.curToken}
+	stmt.Expression = p.parseExpr()
+
+	if p.peekTokenIs(token.NEWLINE) {
 		p.nextToken()
 	}
 
 	return stmt
+}
 
+func (p *Parser) parseExpr() ast.Expression {
+	prefix := p.prefixParseFuncs[p.curToken.Type]
+	if prefix == nil {
+		p.noPrefixParseFuncError(p.curToken.Type)
+		return nil
+	}
+	leftExpr := prefix()
+
+	for !p.peekTokenIs(token.NEWLINE) {
+
+		infix := p.infixParseFuncs[p.peekToken.Type]
+		if infix == nil {
+			return leftExpr
+		}
+
+		p.nextToken()
+		leftExpr = infix(leftExpr)
+	}
+	return leftExpr
+}
+
+func (p *Parser) parseIntegerLiteral() ast.Expression {
+	lit := &ast.IntegerLiteral{Token: p.curToken}
+
+	value := int64(0)
+
+	if p.curTokenIs(token.KI) {
+		value++
+	} else if p.curTokenIs(token.HU) {
+		value--
+	}
+
+	for p.peekTokenIs(token.KI) || p.peekTokenIs(token.HU) {
+		switch p.curToken.Type {
+		case token.KI:
+			value++
+		case token.HU:
+			value--
+		}
+		p.nextToken()
+	}
+
+	lit.Value = value
+
+	return lit
+}
+
+func (p *Parser) parseInfixIntegerExpression(left ast.Expression) ast.Expression {
+	expr := &ast.InfixIntegerExpression{
+		Token:    p.curToken,
+		Operator: p.curToken.Literal,
+		Left:     left,
+	}
+
+	value := int64(0)
+
+	if p.curTokenIs(token.KI) {
+		value++
+	} else if p.curTokenIs(token.HU) {
+		value--
+	}
+
+	for p.peekTokenIs(token.KI) || p.peekTokenIs(token.HU) {
+		switch p.curToken.Type {
+		case token.KI:
+			value++
+		case token.HU:
+			value--
+		}
+		p.nextToken()
+	}
+
+	expr.Right = value
+
+	return expr
+
+}
+
+func (p *Parser) parseTUExpression(left ast.Expression) ast.Expression {
+	exp := &ast.TUExpression{Token: p.curToken, Left: left}
+
+	p.nextToken()
+	exp.Right = p.parseExpr()
+
+	return exp
+}
+
+func (p *Parser) parseIdentitifier() ast.Expression {
+	exp := &ast.Identifier{Token: p.curToken, Value: p.curToken.Literal}
+	return exp
 }
 
 func (p *Parser) curTokenIs(t token.TokenType) bool {
@@ -101,4 +229,21 @@ func (p *Parser) expectPeek(t token.TokenType) bool {
 		p.peekError(t)
 		return false
 	}
+}
+
+func (p *Parser) registerPrefix(tokenType token.TokenType, fn prefixParseFunc) {
+	p.prefixParseFuncs[tokenType] = fn
+}
+
+func (p *Parser) registerInfix(tokenType token.TokenType, fn infixParseFunc) {
+	p.infixParseFuncs[tokenType] = fn
+}
+
+func (p *Parser) registerPostfix(tokenType token.TokenType, fn postfixParseFunc) {
+	p.postfixParseFuncs[tokenType] = fn
+}
+
+func (p *Parser) noPrefixParseFuncError(t token.TokenType) {
+	msg := fmt.Sprintf("Line %d: No prefix parse function for %s found", p.curToken.Line, t)
+	p.errors = append(p.errors, msg)
 }

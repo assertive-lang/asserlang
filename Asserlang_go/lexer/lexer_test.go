@@ -24,7 +24,7 @@ func TestNextToken(t *testing.T) {
 		{token.EOF, "슉슈슉슉"},
 	}
 
-	l := New(input)
+	l := New(input, false)
 
 	for i, tt := range tests {
 		tok := l.NextToken()

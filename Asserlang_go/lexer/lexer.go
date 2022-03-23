@@ -12,40 +12,10 @@ type Lexer struct {
 	line         int
 }
 
-func New(input string) *Lexer {
-	l := &Lexer{input: input}
-	l.readChar()
-	if l.ch == "쿠" {
-		l.readChar()
-		if l.ch == "쿠" {
-			l.readChar()
-			if l.ch == "루" {
-				l.readChar()
-				if l.ch == "삥" {
-					l.readChar()
-					if l.ch == "뽕" {
-						l.readChar()
-						if l.ch == "\n" {
-							l.readChar()
+func New(input string, console bool) *Lexer {
+	l := &Lexer{input: input, line: 1}
 
-						} else {
-							return nil
-						}
-					} else {
-						return nil
-					}
-				} else {
-					return nil
-				}
-			} else {
-				return nil
-			}
-		} else {
-			return nil
-		}
-	} else {
-		return nil
-	}
+	l.readChar()
 	return l
 }
 
@@ -82,6 +52,11 @@ func (l *Lexer) NextToken() token.Token {
 			l.readChar()
 			tok = newToken(token.LET, "어쩔", l.line)
 		}
+	case "저":
+		if l.peek() == "쩔" {
+			l.readChar()
+			tok = newToken(token.LET, "저쩔", l.line)
+		}
 	case "ㅋ":
 		tok = newToken(token.KI, "ㅋ", l.line)
 	case "~":
@@ -93,6 +68,23 @@ func (l *Lexer) NextToken() token.Token {
 	case "슉":
 		if l.IsLast() {
 			tok = newToken(token.EOF, "슉슈슉슉", l.line)
+
+		}
+	case "쿠":
+		l.readChar()
+		if l.ch == "쿠" {
+			l.readChar()
+			if l.ch == "루" {
+				l.readChar()
+				if l.ch == "삥" {
+					l.readChar()
+					if l.ch == "뽕" {
+						l.readChar()
+						tok = newToken(token.BOF, "쿠쿠루삥뽕", l.line)
+
+					}
+				}
+			}
 		}
 	case "\n":
 		tok = newToken(token.NEWLINE, "\n", l.line)
@@ -101,7 +93,9 @@ func (l *Lexer) NextToken() token.Token {
 		tok.Literal = ""
 		tok.Type = token.EOF
 		tok.Line = l.line
+
 	default:
+		tok.Line = l.line
 		tok.Literal = l.readIdentifier()
 		tok.Type = token.LookupIdent(tok.Literal)
 		return tok
@@ -114,12 +108,33 @@ func (l *Lexer) NextToken() token.Token {
 func (l *Lexer) readIdentifier() string {
 	position := l.position
 
-	for l.peek() != "~" {
+	for !isIdentifier(l.ch, l.peek()) {
 		l.readChar()
 	}
 
-	l.readChar()
 	return string(l.input[position:l.position])
+}
+
+func isIdentifier(tok string, peek string) bool {
+	switch tok {
+	case "어":
+		if peek == "쩔" {
+			return true
+		}
+	case "ㅋ":
+		return true
+	case "~":
+		return true
+	case "ㅎ":
+		return true
+	case "ㅌ":
+		return true
+	case "\n":
+		return true
+	case " ":
+		return true
+	}
+	return false
 }
 
 func (l *Lexer) peek() string {

@@ -5,6 +5,8 @@ const (
 	BOF     = "BOF"
 	EOF     = "EOF"
 	NEWLINE = "NEWLINE"
+	
+	
 
 	IDENT = "IDENT"
 

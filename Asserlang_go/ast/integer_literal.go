@@ -2,14 +2,14 @@ package ast
 
 import "github.com/assertive-lang/asserlang/Asserlang_go/token"
 
-type IntegerExpression struct {
+type IntegerLiteral struct {
 	Token       token.Token
 	Experession string
-	Value       int
+	Value       int64
 }
 
-func (ie *IntegerExpression) expressionNode() {}
+func (ie *IntegerLiteral) expressionNode() {}
 
-func (ie *IntegerExpression) TokenLiteral() string { return ie.Token.Literal }
+func (ke *IntegerLiteral) TokenLiteral() string { return ke.Token.Literal }
 
-func (ie *IntegerExpression) String() string { return ie.Token.Literal }
+func (ke *IntegerLiteral) String() string { return ke.Token.Literal }
