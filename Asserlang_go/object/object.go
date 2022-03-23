@@ -1,13 +1,19 @@
 package object
 
 import (
+	"bytes"
 	"fmt"
+	"strings"
+
+	"github.com/assertive-lang/asserlang/Asserlang_go/ast"
 )
 
 const (
-	INTEGER_OBJ = "INTEGER"
-	ERROR_OBJ   = "ERROR"
-	BUILTIN_OBJ = "BUILTIN"
+	INTEGER_OBJ     = "INTEGER"
+	ERROR_OBJ       = "ERROR"
+	BUILTIN_OBJ     = "BUILTIN"
+	FUNCTION_OBJ    = "FUNCTION"
+	RETURNVALUE_OBJ = "RETURN_VALUE"
 )
 
 type ObjectType string
@@ -68,3 +74,40 @@ func bPrint(args ...Object) Object {
 	}
 	return nil
 }
+
+type Function struct {
+	Parameters []*ast.Identifier
+	Body       *ast.BlockStatement
+	Env        *Environment
+}
+
+func (f *Function) Type() ObjectType { return FUNCTION_OBJ }
+
+func (f *Function) Inspect() string {
+	var out bytes.Buffer
+
+	params := []string{}
+	for _, p := range f.Parameters {
+		params = append(params, p.String())
+	}
+
+	out.WriteString("func")
+	out.WriteString("(")
+	out.WriteString(strings.Join(params, ", "))
+	out.WriteString(") {\n")
+	out.WriteString(f.Body.String())
+	out.WriteString("\n")
+
+	return out.String()
+}
+
+// ReturnValue type holds a return value
+type ReturnValue struct {
+	Value Object
+}
+
+// Type returns our ReturnValue's ObjectType (ReturnValueObj)
+func (rv *ReturnValue) Type() ObjectType { return RETURNVALUE_OBJ }
+
+// Inspect returns a string representation of the ReturnValue's Value
+func (rv *ReturnValue) Inspect() string { return rv.Value.Inspect() }

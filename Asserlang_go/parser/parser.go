@@ -45,6 +45,7 @@ func New(l *lexer.Lexer) *Parser {
 	p.registerInfix(token.KI, p.parseInfixIntegerExpression)
 	p.registerInfix(token.HU, p.parseInfixIntegerExpression)
 	p.registerInfix(token.TU, p.parseTUExpression)
+	p.registerInfix(token.WAVE, p.parseCallExpression)
 
 	p.nextToken()
 	p.nextToken()
@@ -237,12 +238,17 @@ func (p *Parser) parseExprList(end token.TokenType) []ast.Expression {
 		return list
 	}
 
-	if !p.expectPeek(token.WAVE) {
-		return nil
-	}
+	p.nextToken()
+	list = append(list, p.parseExpr())
 
+	for p.peekTokenIs(token.WAVE) {
+		p.nextToken()
+		p.nextToken()
+		list = append(list, p.parseExpr())
+	}
 	p.nextToken()
 
+	fmt.Printf("%+v", list)
 	return list
 }
 
