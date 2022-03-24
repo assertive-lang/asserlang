@@ -14,6 +14,7 @@ const (
 	BUILTIN_OBJ     = "BUILTIN"
 	FUNCTION_OBJ    = "FUNCTION"
 	RETURNVALUE_OBJ = "RETURN_VALUE"
+	NULL_OBJ        = "NULL"
 )
 
 type ObjectType string
@@ -33,6 +34,13 @@ func (i *Integer) Type() ObjectType { return INTEGER_OBJ }
 type Error struct {
 	Message string
 }
+
+// Null type is an empty struct
+type Null struct{}
+
+func (n *Null) Type() ObjectType { return NULL_OBJ }
+
+func (n *Null) Inspect() string { return "null" }
 
 func (e *Error) Type() ObjectType { return ERROR_OBJ }
 func (e *Error) Inspect() string  { return e.Message }
@@ -66,12 +74,19 @@ var Builtins = []struct {
 	Builtin *Builtin
 }{
 	{"ㅇㅉ", &Builtin{Fn: bPrint}},
+	{"ㅌㅂ", &Builtin{Fn: bInput}},
 }
 
 func bPrint(args ...Object) Object {
 	for _, arg := range args {
 		fmt.Println(arg.Inspect())
 	}
+	return nil
+}
+
+func bInput(args ...Object) Object {
+	var tmp string
+	fmt.Scanln(&tmp)
 	return nil
 }
 
@@ -101,13 +116,10 @@ func (f *Function) Inspect() string {
 	return out.String()
 }
 
-// ReturnValue type holds a return value
 type ReturnValue struct {
 	Value Object
 }
 
-// Type returns our ReturnValue's ObjectType (ReturnValueObj)
 func (rv *ReturnValue) Type() ObjectType { return RETURNVALUE_OBJ }
 
-// Inspect returns a string representation of the ReturnValue's Value
 func (rv *ReturnValue) Inspect() string { return rv.Value.Inspect() }

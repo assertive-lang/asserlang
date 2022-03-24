@@ -46,7 +46,6 @@ func (l *Lexer) NextToken() token.Token {
 			tok = newToken(token.LET, "어쩔", l.line)
 		}
 	case "ㅇ":
-
 		if l.peek() == "ㅉ" {
 			l.readChar()
 
@@ -80,7 +79,12 @@ func (l *Lexer) NextToken() token.Token {
 	case "ㅎ":
 		tok = newToken(token.HU, "ㅎ", l.line)
 	case "ㅌ":
-		tok = newToken(token.TU, "ㅌ", l.line)
+		if l.peek() == "ㅂ" {
+			l.readChar()
+			tok = newToken(token.IDENT, "ㅌㅂ", l.line)
+		} else {
+			tok = newToken(token.TU, "ㅌ", l.line)
+		}
 	case "슉":
 		if l.IsLast() {
 			tok = newToken(token.EOF, "슉슈슉슉", l.line)

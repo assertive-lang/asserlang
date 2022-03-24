@@ -7,8 +7,13 @@ import (
 	"github.com/assertive-lang/asserlang/Asserlang_go/object"
 )
 
+var (
+	Null   = &object.Null{}
+	Errors = []*object.Error{}
+)
+
 func Eval(node ast.Node, env *object.Environment) object.Object {
-	// fmt.Printf("%T\n", node)
+	//	fmt.Printf("%T\n", node)
 
 	switch node := node.(type) {
 	case *ast.Program:
@@ -106,12 +111,10 @@ func evalBlockStmt(block *ast.BlockStatement, env *object.Environment) object.Ob
 
 	return result
 }
-func newError(format string, a ...interface{}) *object.Error {
-	return &object.Error{Message: fmt.Sprintf(format, a...)}
-}
 
 var builtinFunctions = map[string]*object.Builtin{
 	"ㅇㅉ": object.GetBuiltinByName("ㅇㅉ"),
+	"ㅌㅂ": object.GetBuiltinByName("ㅌㅂ"),
 }
 
 func applyFunction(function object.Object, args []object.Object, line int) object.Object {
@@ -124,7 +127,7 @@ func applyFunction(function object.Object, args []object.Object, line int) objec
 		if result := fn.Fn(args...); result != nil {
 			return result
 		}
-		return nil
+		return Null
 	default:
 		return newError("Line %d: Not a function: %s", line, function.Type())
 	}
@@ -165,4 +168,10 @@ func isError(obj object.Object) bool {
 		return obj.Type() == object.ERROR_OBJ
 	}
 	return false
+}
+
+func newError(format string, a ...interface{}) *object.Error {
+	err := &object.Error{Message: fmt.Sprintf(format, a...)}
+	Errors = append(Errors, err)
+	return err
 }

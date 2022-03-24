@@ -46,6 +46,11 @@ func main() {
 		} else {
 			env := object.NewEnvironment()
 			eval.Eval(program, env)
+			if len(eval.Errors) > 0 {
+				for _, err := range eval.Errors {
+					println(err.Inspect())
+				}
+			}
 		}
 
 	} else {
