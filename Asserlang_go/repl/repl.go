@@ -26,7 +26,7 @@ func Start() {
 		}
 
 		line := scanner.Text()
-		l := lexer.New(line+"\n", true)
+		l := lexer.New(line + "\n슉슈슉슉")
 
 		p := parser.New(l)
 		program := p.ParseProgram()

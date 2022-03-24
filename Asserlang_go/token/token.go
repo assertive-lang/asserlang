@@ -5,15 +5,16 @@ const (
 	BOF     = "BOF"
 	EOF     = "EOF"
 	NEWLINE = "NEWLINE"
-	
-	
+
+	ANMUL  = "ANMUL"
+	ANGUNG = "ANGUNG"
 
 	IDENT = "IDENT"
 
 	WAVE = "WAVE"
-	KI     = "KI"
-	HU     = "HU"
-	TU     = "TU"
+	KI   = "KI"
+	HU   = "HU"
+	TU   = "TU"
 
 	SEMICOLON = ";"
 

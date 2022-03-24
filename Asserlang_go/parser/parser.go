@@ -6,6 +6,7 @@ import (
 
 	"github.com/assertive-lang/asserlang/Asserlang_go/ast"
 	"github.com/assertive-lang/asserlang/Asserlang_go/lexer"
+	"github.com/assertive-lang/asserlang/Asserlang_go/object"
 	"github.com/assertive-lang/asserlang/Asserlang_go/token"
 )
 
@@ -41,11 +42,12 @@ func New(l *lexer.Lexer) *Parser {
 	p.registerPrefix(token.HU, p.parseIntegerLiteral)
 	p.registerPrefix(token.IDENT, p.parseIdentitifier)
 	p.registerPrefix(token.EOF, func() ast.Expression { os.Exit(0); return nil })
+	p.registerPrefix(token.ANGUNG, p.parseCallExpression)
+	p.registerPrefix(token.ANMUL, p.parseFunctionLiteral)
 
 	p.registerInfix(token.KI, p.parseInfixIntegerExpression)
 	p.registerInfix(token.HU, p.parseInfixIntegerExpression)
 	p.registerInfix(token.TU, p.parseTUExpression)
-	p.registerInfix(token.WAVE, p.parseCallExpression)
 
 	p.nextToken()
 	p.nextToken()
@@ -64,6 +66,8 @@ func (p *Parser) peekError(t token.TokenType) {
 func (p *Parser) nextToken() {
 	p.curToken = p.peekToken
 	p.peekToken = p.l.NextToken()
+
+	//fmt.Printf("'%v': %v\n", strings.Replace(p.curToken.Literal, "\n", "\\n", 1), p.curToken.Type)
 }
 
 func (p *Parser) ParseProgram() *ast.Program {
@@ -75,10 +79,12 @@ func (p *Parser) ParseProgram() *ast.Program {
 
 		if stmt != nil {
 			program.Statements = append(program.Statements, stmt)
+
 		}
 
 		p.nextToken()
 	}
+
 	return program
 }
 
@@ -109,10 +115,78 @@ func (p *Parser) parseLetStatement() *ast.LetStatement {
 	}
 
 	p.nextToken()
+
 	stmt.Value = p.parseExpr()
 
-	return stmt
+	if fl, ok := stmt.Value.(*ast.FunctionLiteral); ok {
+		fl.Name = stmt.Name.Value
+	}
 
+	return stmt
+}
+
+func (p *Parser) parseFunctionLiteral() ast.Expression {
+	lit := &ast.FunctionLiteral{Token: p.peekToken, Name: p.peekToken.Literal}
+
+	if !p.peekTokenIs(token.IDENT) {
+		return nil
+	}
+	p.nextToken()
+	p.nextToken()
+
+	lit.Parameters = p.parseFunctionParams()
+	p.nextToken()
+	lit.Body = p.parseBlockStatement()
+
+	return lit
+}
+
+func (p *Parser) parseFunctionParams() []*ast.Identifier {
+	identifiers := []*ast.Identifier{}
+
+	if p.peekTokenIs(token.NEWLINE) {
+		p.nextToken()
+		return identifiers
+	}
+	p.nextToken()
+
+	ident := &ast.Identifier{
+		Token: p.curToken,
+		Value: p.curToken.Literal,
+	}
+	identifiers = append(identifiers, ident)
+
+	for p.peekTokenIs(token.WAVE) {
+		p.nextToken()
+		p.nextToken()
+
+		ident := &ast.Identifier{
+			Token: p.curToken,
+			Value: p.curToken.Literal,
+		}
+		identifiers = append(identifiers, ident)
+	}
+
+	return identifiers
+}
+
+func (p *Parser) parseBlockStatement() *ast.BlockStatement {
+	block := &ast.BlockStatement{Token: p.curToken}
+	block.Statements = []ast.Statement{}
+
+	p.nextToken()
+
+	for !p.curTokenIs(token.ANMUL) && !p.curTokenIs(token.EOF) {
+		stmt := p.parseStatement()
+		if stmt != nil {
+			block.Statements = append(block.Statements, stmt)
+		}
+
+		p.nextToken()
+
+	}
+
+	return block
 }
 
 func (p *Parser) parseExprStatement() *ast.ExpressionStatement {
@@ -128,7 +202,6 @@ func (p *Parser) parseExprStatement() *ast.ExpressionStatement {
 
 func (p *Parser) parseExpr() ast.Expression {
 	prefix := p.prefixParseFuncs[p.curToken.Type]
-
 	if prefix == nil {
 		p.noPrefixParseFuncError(p.curToken.Type)
 		return nil
@@ -136,7 +209,6 @@ func (p *Parser) parseExpr() ast.Expression {
 	leftExpr := prefix()
 
 	for !p.peekTokenIs(token.NEWLINE) {
-
 		infix := p.infixParseFuncs[p.peekToken.Type]
 		if infix == nil {
 			return leftExpr
@@ -166,6 +238,7 @@ func (p *Parser) parseIntegerLiteral() ast.Expression {
 		case token.HU:
 			value--
 		}
+
 		p.nextToken()
 	}
 
@@ -175,6 +248,7 @@ func (p *Parser) parseIntegerLiteral() ast.Expression {
 }
 
 func (p *Parser) parseInfixIntegerExpression(left ast.Expression) ast.Expression {
+
 	expr := &ast.InfixIntegerExpression{
 		Token:    p.curToken,
 		Operator: p.curToken.Literal,
@@ -215,14 +289,38 @@ func (p *Parser) parseTUExpression(left ast.Expression) ast.Expression {
 }
 
 func (p *Parser) parseIdentitifier() ast.Expression {
+	if object.GetBuiltinByName(p.curToken.Literal) != nil {
+
+		expr := &ast.CallExpression{
+			Token: p.curToken,
+			Function: &ast.Identifier{
+				Token: p.curToken,
+				Value: p.curToken.Literal,
+			},
+		}
+		if p.peekTokenIs(token.NEWLINE) {
+			p.nextToken()
+			expr.Arguments = []ast.Expression{}
+
+			return expr
+		}
+		p.nextToken()
+		val := p.parseExpr()
+
+		expr.Arguments = []ast.Expression{val}
+
+		return expr
+
+	}
 	exp := &ast.Identifier{Token: p.curToken, Value: p.curToken.Literal}
+
 	return exp
 }
 
-func (p *Parser) parseCallExpression(function ast.Expression) ast.Expression {
+func (p *Parser) parseCallExpression() ast.Expression {
 	expr := &ast.CallExpression{
 		Token:    p.curToken,
-		Function: function,
+		Function: &ast.Identifier{Token: p.peekToken, Value: p.peekToken.Literal},
 	}
 	expr.Arguments = p.parseExprList(token.NEWLINE)
 
@@ -237,18 +335,16 @@ func (p *Parser) parseExprList(end token.TokenType) []ast.Expression {
 		p.nextToken()
 		return list
 	}
-
 	p.nextToken()
-	list = append(list, p.parseExpr())
 
 	for p.peekTokenIs(token.WAVE) {
 		p.nextToken()
 		p.nextToken()
-		list = append(list, p.parseExpr())
+		val := p.parseExpr()
+		list = append(list, val)
 	}
 	p.nextToken()
 
-	fmt.Printf("%+v", list)
 	return list
 }
 

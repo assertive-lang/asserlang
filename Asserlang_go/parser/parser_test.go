@@ -14,7 +14,7 @@ func TestLetStatements(t *testing.T) {
 	어쩔인트~ㅋㅋㅋㅋ
 	어쩔바보~ㅋㅋㅋ
 	슉슈슉슉`
-	l := lexer.New(input, false)
+	l := lexer.New(input)
 	p := New(l)
 	program := p.ParseProgram()
 

@@ -8,6 +8,7 @@ import (
 )
 
 func Eval(node ast.Node, env *object.Environment) object.Object {
+	// fmt.Printf("%T\n", node)
 
 	switch node := node.(type) {
 	case *ast.Program:
@@ -20,6 +21,20 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 		val := Eval(node.Value, env)
 		env.Set(node.Name.Value, val)
 
+		return val
+
+	case *ast.BlockStatement:
+		return evalBlockStmt(node, env)
+
+	case *ast.FunctionLiteral:
+		params := node.Parameters
+		body := node.Body
+		val := &object.Function{
+			Parameters: params,
+			Body:       body,
+			Env:        env,
+		}
+		env.Set(node.Name, val)
 		return val
 
 	case *ast.CallExpression:
@@ -35,7 +50,15 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 
 	case *ast.InfixIntegerExpression:
 		leftObj := Eval(node.Left, env)
-		return &object.Integer{Value: leftObj.(*object.Integer).Value + node.Right}
+
+		switch left := leftObj.(type) {
+		case *object.Integer:
+			return &object.Integer{Value: left.Value + node.Right}
+		case *object.Builtin:
+
+			return applyFunction(left, []object.Object{&object.Integer{Value: node.Right}}, node.Token.Line)
+
+		}
 
 	case *ast.TUExpression:
 		leftObj := Eval(node.Left, env)
@@ -49,12 +72,11 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 		if val, ok := env.Get(node.Value); ok {
 			return val
 		}
-
 		if builtinFn, ok := builtinFunctions[node.Value]; ok {
 			return builtinFn
 		}
 
-		return newError("어쩔변수")
+		return newError(fmt.Sprintf("어쩔변수 at line %d: %s", node.Token.Line, node.Value))
 
 	}
 	return nil
@@ -68,12 +90,28 @@ func evalStatements(stmts []ast.Statement, env *object.Environment) object.Objec
 	return result
 }
 
+func evalBlockStmt(block *ast.BlockStatement, env *object.Environment) object.Object {
+	var result object.Object
+
+	for _, stmt := range block.Statements {
+		result = Eval(stmt, env)
+
+		if result != nil {
+			rt := result.Type()
+			if rt == object.RETURNVALUE_OBJ || rt == object.ERROR_OBJ {
+				return result
+			}
+		}
+	}
+
+	return result
+}
 func newError(format string, a ...interface{}) *object.Error {
 	return &object.Error{Message: fmt.Sprintf(format, a...)}
 }
 
 var builtinFunctions = map[string]*object.Builtin{
-	"print": object.GetBuiltinByName("print"),
+	"ㅇㅉ": object.GetBuiltinByName("ㅇㅉ"),
 }
 
 func applyFunction(function object.Object, args []object.Object, line int) object.Object {
@@ -98,7 +136,6 @@ func extendFunctionEnv(fn *object.Function, args []object.Object) *object.Enviro
 	for i, param := range fn.Parameters {
 		env.Set(param.Value, args[i])
 	}
-
 	return env
 }
 

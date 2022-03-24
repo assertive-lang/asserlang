@@ -12,7 +12,7 @@ type Lexer struct {
 	line         int
 }
 
-func New(input string, console bool) *Lexer {
+func New(input string) *Lexer {
 	l := &Lexer{input: input, line: 1}
 
 	l.readChar()
@@ -20,13 +20,6 @@ func New(input string, console bool) *Lexer {
 }
 
 func (l *Lexer) readChar() {
-	if l.readPosition >= len(l.input) {
-		l.ch = ""
-
-		l.position = l.readPosition
-		l.readPosition += 1
-		return
-	}
 	Byte1 := l.input[l.readPosition]
 
 	if Byte1 >= 128 {
@@ -52,11 +45,34 @@ func (l *Lexer) NextToken() token.Token {
 			l.readChar()
 			tok = newToken(token.LET, "어쩔", l.line)
 		}
+	case "ㅇ":
+
+		if l.peek() == "ㅉ" {
+			l.readChar()
+
+			tok = newToken(token.IDENT, "ㅇㅉ", l.line)
+			l.readChar()
+			return tok
+		}
+
 	case "저":
 		if l.peek() == "쩔" {
 			l.readChar()
 			tok = newToken(token.LET, "저쩔", l.line)
 		}
+	case "안":
+		if l.peek() == "물" {
+			l.readChar()
+			tok = newToken(token.ANMUL, "안물", l.line)
+		} else if l.peek() == "궁" {
+			l.readChar()
+			tok = newToken(token.ANGUNG, "안궁", l.line)
+		} else {
+			tok.Line = l.line
+			tok.Literal = l.readIdentifier()
+			tok.Type = token.LookupIdent(tok.Literal)
+		}
+
 	case "ㅋ":
 		tok = newToken(token.KI, "ㅋ", l.line)
 	case "~":
@@ -68,7 +84,7 @@ func (l *Lexer) NextToken() token.Token {
 	case "슉":
 		if l.IsLast() {
 			tok = newToken(token.EOF, "슉슈슉슉", l.line)
-
+			return tok
 		}
 	case "쿠":
 		l.readChar()
@@ -80,6 +96,7 @@ func (l *Lexer) NextToken() token.Token {
 					l.readChar()
 					if l.ch == "뽕" {
 						l.readChar()
+
 						tok = newToken(token.BOF, "쿠쿠루삥뽕", l.line)
 
 					}
@@ -89,10 +106,6 @@ func (l *Lexer) NextToken() token.Token {
 	case "\n":
 		tok = newToken(token.NEWLINE, "\n", l.line)
 		l.line++
-	case "":
-		tok.Literal = ""
-		tok.Type = token.EOF
-		tok.Line = l.line
 
 	default:
 		tok.Line = l.line
@@ -138,9 +151,6 @@ func isIdentifier(tok string, peek string) bool {
 }
 
 func (l *Lexer) peek() string {
-	if l.readPosition >= len(l.input) {
-		return ""
-	}
 	if l.input[l.readPosition] >= 128 {
 		return string([]byte{l.input[l.readPosition], l.input[l.readPosition+1], l.input[l.readPosition+2]})
 	} else {
@@ -155,6 +165,7 @@ func (l *Lexer) skipWhitespace() {
 }
 
 func (l *Lexer) IsLast() bool {
+
 	return l.input[l.position:l.position+12] == "슉슈슉슉"
 }
 

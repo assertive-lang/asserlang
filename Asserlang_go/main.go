@@ -28,9 +28,8 @@ func main() {
 			panic(fmt.Errorf("어쩔파일: %s", err))
 		}
 
-		l := lexer.New(string(raw), false)
+		l := lexer.New(string(raw))
 		p := parser.New(l)
-
 		program := p.ParseProgram()
 
 		if program == nil {
@@ -46,8 +45,7 @@ func main() {
 
 		} else {
 			env := object.NewEnvironment()
-			result := eval.Eval(program, env)
-			println(result.Inspect())
+			eval.Eval(program, env)
 		}
 
 	} else {
