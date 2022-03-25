@@ -17,9 +17,12 @@ const (
 	TU   = "TU"
 
 	SEMICOLON = ";"
+	QUESTION  = "?"
 
 	FUNCTION = "FUNCTION"
 	LET      = "LET"
+	IF       = "IF"
+	THEN     = "THEN"
 )
 
 type TokenType string
@@ -33,6 +36,8 @@ type Token struct {
 var keywords = map[string]TokenType{
 	"안물": FUNCTION,
 	"어쩔": LET,
+	"화나쥬":IF,
+	"킹받쥬":THEN,
 }
 
 func LookupIdent(ident string) TokenType {

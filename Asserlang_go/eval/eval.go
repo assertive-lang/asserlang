@@ -32,6 +32,16 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 		env.Set(node.Name.Value, val)
 
 		return val
+	case *ast.IfExpression:
+		cond := Eval(node.Condition, env)
+
+		if isError(cond) {
+			return nil
+		}
+
+		if cond.(*object.Integer).Value == 0 {
+			return Eval(node.Consequence, env)
+		}
 
 	case *ast.BlockStatement:
 		return evalBlockStmt(node, env)

@@ -44,6 +44,7 @@ func New(l *lexer.Lexer) *Parser {
 	p.registerPrefix(token.EOF, func() ast.Expression { os.Exit(0); return nil })
 	p.registerPrefix(token.ANGUNG, p.parseCallExpression)
 	p.registerPrefix(token.ANMUL, p.parseFunctionLiteral)
+	p.registerPrefix(token.IF, p.parseIFExpression)
 
 	p.registerInfix(token.KI, p.parseInfixIntegerExpression)
 	p.registerInfix(token.HU, p.parseInfixIntegerExpression)
@@ -121,6 +122,34 @@ func (p *Parser) parseLetStatement() *ast.LetStatement {
 	return stmt
 }
 
+func (p *Parser) parseIFExpression() ast.Expression {
+	expr := &ast.IfExpression{
+		Token: p.curToken,
+	}
+	if !p.expectPeek(token.QUESTION) {
+		return nil
+	}
+	p.nextToken()
+	cond := p.parseExpr()
+
+	if cond == nil {
+		return nil
+	}
+	expr.Condition = cond
+
+	if !p.expectPeek(token.THEN) {
+		return nil
+	}
+
+	if !p.expectPeek(token.QUESTION) {
+		return nil
+	}
+	expr.Consequence = p.parseBlockStatement(token.NEWLINE)
+
+	return expr
+
+}
+
 func (p *Parser) parseFunctionLiteral() ast.Expression {
 	lit := &ast.FunctionLiteral{Token: p.peekToken, Name: p.peekToken.Literal}
 
@@ -132,7 +161,7 @@ func (p *Parser) parseFunctionLiteral() ast.Expression {
 
 	lit.Parameters = p.parseFunctionParams()
 	p.nextToken()
-	lit.Body = p.parseBlockStatement()
+	lit.Body = p.parseBlockStatement(token.ANMUL)
 
 	return lit
 }
@@ -166,13 +195,13 @@ func (p *Parser) parseFunctionParams() []*ast.Identifier {
 	return identifiers
 }
 
-func (p *Parser) parseBlockStatement() *ast.BlockStatement {
+func (p *Parser) parseBlockStatement(end token.TokenType) *ast.BlockStatement {
 	block := &ast.BlockStatement{Token: p.curToken}
 	block.Statements = []ast.Statement{}
 
 	p.nextToken()
 
-	for !p.curTokenIs(token.ANMUL) && !p.curTokenIs(token.EOF) {
+	for !p.curTokenIs(end) && !p.curTokenIs(token.EOF) {
 		stmt := p.parseStatement()
 		if stmt != nil {
 			block.Statements = append(block.Statements, stmt)
@@ -228,7 +257,7 @@ func (p *Parser) parseIntegerLiteral() ast.Expression {
 	}
 
 	for p.peekTokenIs(token.KI) || p.peekTokenIs(token.HU) {
-		switch p.curToken.Type {
+		switch p.peekToken.Type {
 		case token.KI:
 			value++
 		case token.HU:
@@ -260,7 +289,7 @@ func (p *Parser) parseInfixIntegerExpression(left ast.Expression) ast.Expression
 	}
 
 	for p.peekTokenIs(token.KI) || p.peekTokenIs(token.HU) {
-		switch p.curToken.Type {
+		switch p.peekToken.Type {
 		case token.KI:
 			value++
 		case token.HU:

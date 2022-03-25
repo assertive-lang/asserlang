@@ -53,6 +53,7 @@ func (l *Lexer) NextToken() token.Token {
 			l.readChar()
 			return tok
 		}
+
 	case "우":
 		if l.peek() == "짤" {
 			l.readChar()
@@ -81,6 +82,15 @@ func (l *Lexer) NextToken() token.Token {
 			}
 		}
 
+	case "화":
+		if l.peek() == "났" {
+			l.readChar()
+			if l.peek() == "쥬" {
+				l.readChar()
+				tok = newToken(token.IF, "화났쥬", l.line)
+			}
+		}
+
 	case "안":
 		if l.peek() == "물" {
 			l.readChar()
@@ -96,10 +106,10 @@ func (l *Lexer) NextToken() token.Token {
 
 	case "ㅋ":
 		tok = newToken(token.KI, "ㅋ", l.line)
-	case "~":
-		tok = newToken(token.WAVE, "~", l.line)
+
 	case "ㅎ":
 		tok = newToken(token.HU, "ㅎ", l.line)
+
 	case "ㅌ":
 		if l.peek() == "ㅂ" {
 			l.readChar()
@@ -107,6 +117,13 @@ func (l *Lexer) NextToken() token.Token {
 		} else {
 			tok = newToken(token.TU, "ㅌ", l.line)
 		}
+
+	case "?":
+		tok = newToken(token.QUESTION, "?", l.line)
+
+	case "~":
+		tok = newToken(token.WAVE, "~", l.line)
+
 	case "슉":
 		if l.IsLast() {
 			tok = newToken(token.EOF, "슉슈슉슉", l.line)
@@ -130,7 +147,7 @@ func (l *Lexer) NextToken() token.Token {
 			}
 		}
 	case "\n":
-		tok = newToken(token.NEWLINE, "\n", l.line)
+		tok = newToken(token.NEWLINE, "\\n", l.line)
 		l.line++
 
 	default:
@@ -147,17 +164,40 @@ func (l *Lexer) NextToken() token.Token {
 func (l *Lexer) readIdentifier() string {
 	position := l.position
 
-	for !isIdentifier(l.ch, l.peek()) {
+	for !l.isIdentifier() {
 		l.readChar()
 	}
 
 	return string(l.input[position:l.position])
 }
 
-func isIdentifier(tok string, peek string) bool {
-	switch tok {
+func (l *Lexer) isIdentifier() bool {
+	internalReadPos := l.readPosition
+
+	internalReadChar := func() {
+		Byte1 := l.input[internalReadPos]
+
+		if Byte1 >= 128 {
+			l.ch = string([]byte{Byte1, l.input[internalReadPos+1], l.input[internalReadPos+2]})
+
+			internalReadPos += 3
+		} else {
+			l.ch = string(Byte1)
+			internalReadPos += 1
+		}
+	}
+
+	internalPeek := func() string {
+		if l.input[internalReadPos] >= 128 {
+			return string([]byte{l.input[internalReadPos], l.input[internalReadPos+1], l.input[internalReadPos+2]})
+		} else {
+			return string(l.input[internalReadPos])
+		}
+	}
+
+	switch l.ch {
 	case "어":
-		if peek == "쩔" {
+		if internalPeek() == "쩔" {
 			return true
 		}
 	case "ㅋ":
@@ -172,6 +212,17 @@ func isIdentifier(tok string, peek string) bool {
 		return true
 	case " ":
 		return true
+	case "킹":
+		if internalPeek() == "받" {
+			internalReadChar()
+			if internalPeek() == "쥬" {
+				return true
+			}
+
+		}
+	case "?":
+		return true
+
 	}
 	return false
 }
