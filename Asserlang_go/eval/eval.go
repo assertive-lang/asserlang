@@ -24,6 +24,11 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 
 	case *ast.LetStatement:
 		val := Eval(node.Value, env)
+
+		if node.Token.Literal == "우짤래미" || node.Token.Literal == "저짤래미" {
+
+			val = &object.String{Value: string(rune(val.(*object.Integer).Value))}
+		}
 		env.Set(node.Name.Value, val)
 
 		return val
@@ -68,6 +73,7 @@ func Eval(node ast.Node, env *object.Environment) object.Object {
 	case *ast.TUExpression:
 		leftObj := Eval(node.Left, env)
 		rightObj := Eval(node.Right, env)
+
 		return &object.Integer{Value: leftObj.(*object.Integer).Value * rightObj.(*object.Integer).Value}
 
 	case *ast.IntegerLiteral:

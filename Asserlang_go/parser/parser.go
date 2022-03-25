@@ -58,11 +58,6 @@ func (p *Parser) Errors() []string {
 	return p.errors
 }
 
-func (p *Parser) peekError(t token.TokenType) {
-	msg := fmt.Sprintf("line %d: expected next token to be %s, got %s instead", p.peekToken.Line, t, p.peekToken.Type)
-	p.errors = append(p.errors, msg)
-}
-
 func (p *Parser) nextToken() {
 	p.curToken = p.peekToken
 	p.peekToken = p.l.NextToken()
@@ -105,6 +100,7 @@ func (p *Parser) parseLetStatement() *ast.LetStatement {
 	stmt := &ast.LetStatement{Token: p.curToken}
 
 	if !p.expectPeek(token.IDENT) {
+		p.errors = append(p.errors, fmt.Sprintf("어쩔변수 at line %d", p.peekToken.Line))
 		return nil
 	}
 
@@ -379,6 +375,11 @@ func (p *Parser) registerPostfix(tokenType token.TokenType, fn postfixParseFunc)
 }
 
 func (p *Parser) noPrefixParseFuncError(t token.TokenType) {
-	msg := fmt.Sprintf("Line %d: No prefix parse function for %s found", p.curToken.Line, t)
+	msg := fmt.Sprintf("line %d: No prefix parse function for %s found", p.curToken.Line, t)
+	p.errors = append(p.errors, msg)
+}
+
+func (p *Parser) peekError(t token.TokenType) {
+	msg := fmt.Sprintf("line %d: expected next token to be %s, got %s instead", p.peekToken.Line, t, p.peekToken.Type)
 	p.errors = append(p.errors, msg)
 }

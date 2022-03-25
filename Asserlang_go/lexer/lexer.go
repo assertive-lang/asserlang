@@ -13,7 +13,7 @@ type Lexer struct {
 }
 
 func New(input string) *Lexer {
-	l := &Lexer{input: input, line: 1}
+	l := &Lexer{input: input, line: 2}
 
 	l.readChar()
 	return l
@@ -53,12 +53,34 @@ func (l *Lexer) NextToken() token.Token {
 			l.readChar()
 			return tok
 		}
+	case "우":
+		if l.peek() == "짤" {
+			l.readChar()
+			if l.peek() == "래" {
+				l.readChar()
+				if l.peek() == "미" {
+					l.readChar()
+					tok = newToken(token.LET, "우짤래미", l.line)
+
+				}
+			}
+		}
 
 	case "저":
 		if l.peek() == "쩔" {
 			l.readChar()
 			tok = newToken(token.LET, "저쩔", l.line)
+		} else if l.peek() == "짤" {
+			l.readChar()
+			if l.peek() == "래" {
+				l.readChar()
+				if l.peek() == "미" {
+					l.readChar()
+					tok = newToken(token.LET, "저짤래미", l.line)
+				}
+			}
 		}
+
 	case "안":
 		if l.peek() == "물" {
 			l.readChar()

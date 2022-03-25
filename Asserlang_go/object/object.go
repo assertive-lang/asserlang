@@ -10,6 +10,7 @@ import (
 
 const (
 	INTEGER_OBJ     = "INTEGER"
+	STRING_OBJ      = "STRING"
 	ERROR_OBJ       = "ERROR"
 	BUILTIN_OBJ     = "BUILTIN"
 	FUNCTION_OBJ    = "FUNCTION"
@@ -123,3 +124,10 @@ type ReturnValue struct {
 func (rv *ReturnValue) Type() ObjectType { return RETURNVALUE_OBJ }
 
 func (rv *ReturnValue) Inspect() string { return rv.Value.Inspect() }
+
+type String struct {
+	Value string
+}
+
+func (i *String) Inspect() string  { return i.Value }
+func (i *String) Type() ObjectType { return STRING_OBJ }
