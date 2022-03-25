@@ -135,6 +135,7 @@ func (p *Parser) parseIFExpression() ast.Expression {
 	if cond == nil {
 		return nil
 	}
+
 	expr.Condition = cond
 
 	if !p.expectPeek(token.THEN) {

@@ -16,8 +16,8 @@ const (
 	HU   = "HU"
 	TU   = "TU"
 
-	SEMICOLON = ";"
-	QUESTION  = "?"
+	JUMP     = ";;"
+	QUESTION = "?"
 
 	FUNCTION = "FUNCTION"
 	LET      = "LET"
@@ -34,10 +34,10 @@ type Token struct {
 }
 
 var keywords = map[string]TokenType{
-	"안물": FUNCTION,
-	"어쩔": LET,
-	"화나쥬":IF,
-	"킹받쥬":THEN,
+	"안물":  FUNCTION,
+	"어쩔":  LET,
+	"화나쥬": IF,
+	"킹받쥬": THEN,
 }
 
 func LookupIdent(ident string) TokenType {

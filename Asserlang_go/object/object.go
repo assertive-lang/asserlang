@@ -88,7 +88,7 @@ func bPrint(args ...Object) Object {
 func bInput(args ...Object) Object {
 	var tmp string
 	fmt.Scanln(&tmp)
-	return nil
+	return &String{Value: tmp}
 }
 
 type Function struct {
@@ -129,5 +129,6 @@ type String struct {
 	Value string
 }
 
-func (i *String) Inspect() string  { return i.Value }
+func (i *String) Inspect() string { return i.Value }
+
 func (i *String) Type() ObjectType { return STRING_OBJ }

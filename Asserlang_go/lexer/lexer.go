@@ -117,6 +117,11 @@ func (l *Lexer) NextToken() token.Token {
 		} else {
 			tok = newToken(token.TU, "ㅌ", l.line)
 		}
+	case ";":
+		if l.peek() == ";" {
+			l.readChar()
+			tok = newToken(token.JUMP, ";;", l.line)
+		}
 
 	case "?":
 		tok = newToken(token.QUESTION, "?", l.line)
@@ -164,10 +169,12 @@ func (l *Lexer) NextToken() token.Token {
 func (l *Lexer) readIdentifier() string {
 	position := l.position
 
+	l.readChar()
+
 	for !l.isIdentifier() {
 		l.readChar()
 	}
-
+	
 	return string(l.input[position:l.position])
 }
 
@@ -194,12 +201,16 @@ func (l *Lexer) isIdentifier() bool {
 			return string(l.input[internalReadPos])
 		}
 	}
-
 	switch l.ch {
 	case "어":
 		if internalPeek() == "쩔" {
 			return true
 		}
+	case "저":
+		if internalPeek() == "쩔" {
+			return true
+		}
+
 	case "ㅋ":
 		return true
 	case "~":
