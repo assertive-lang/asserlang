@@ -1,5 +1,7 @@
 # Asserlang 어쩔랭
 
+[어쩔랭 v2 기획안](https://github.com/assertive-lang/asserlang/discussions)에 대한 자신의 아이디어와 의견을 자유롭게 공유해주세요!
+
 Made with ♥️ in South Korea by [chul0721](https://github.com/chul0721) & [sujang958](https://github.com/sujang958)
 
 [디스코드 서버에 참가하여 어쩔랭에 대하여 의견을 남겨주세요!](https://discord.gg/nZEEhDKnvb)  
